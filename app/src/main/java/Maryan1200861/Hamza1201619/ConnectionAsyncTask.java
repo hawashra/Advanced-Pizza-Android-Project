@@ -35,7 +35,11 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
             if (pizzas != null && !pizzas.isEmpty()) {
                 try(DatabaseHelper databaseHelper = new DatabaseHelper(activity)) {
                     for (Pizza pizza : pizzas) {
-                        databaseHelper.insert(pizza.getName());
+                        String pizzaName = pizza.getName();
+                        // if pizza name is not already in the database, add it
+                        if (!databaseHelper.isPizzaInDatabase(pizzaName)) {
+                            databaseHelper.insert(pizzaName);
+                        }
                     }
                 } catch (Exception e) {
                     Toast.makeText(activity, "Failed to save data. Please try again.", Toast.LENGTH_LONG).show();
@@ -49,6 +53,8 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
         } else {
             Toast.makeText(activity, "Failed to connect or no data found. Please check your connection and try again.", Toast.LENGTH_LONG).show();
         }
+
+        ((MainActivity) activity).setButtonText("Get Started");
     }
 
 }

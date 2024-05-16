@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -42,15 +43,36 @@ public class SignUpActivity extends AppCompatActivity {
             if (validateInputs()) {
                 String hashedPassword = HashPassword.hashPassword(editTextPassword.getText().toString(), this);
 
-                registerUser(editTextEmail.getText().toString(), editTextPhone.getText().toString(),
-                        editTextFirstName.getText().toString(), editTextLastName.getText().toString(),
-                        spinnerGender.getSelectedItem().toString(), hashedPassword);
+                User user1 = new User();
+                user1.setEmail(editTextEmail.getText().toString());
+                user1.setFirstname(editTextFirstName.getText().toString());
+                user1.setLastname(editTextLastName.getText().toString());
+                user1.setPhone(editTextPhone.getText().toString());
+                user1.setGender(spinnerGender.getSelectedItem().toString());
+                user1.setHashedPassword(hashedPassword);
+
+                registerUser(user1);
 
                 Intent signInIntent = new Intent(SignUpActivity.this, LoginActivity.class);
 
                 signInIntent.putExtra("email", editTextEmail.getText().toString());
                 startActivity(signInIntent);
+
+                //NOTE: FOR DEBUGGING PURPOSES ONLY
+               try(DatabaseHelper databaseHelper = new DatabaseHelper(this)) {
+
+                   ArrayList<User> allUsers = databaseHelper.getAllUsers();
+
+                   for (User user : allUsers) {
+                       Log.d("User", user.getEmail());
+                   }
+
+               } catch (Exception e) {
+                   Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+               }
+
             }
+
         });
     }
 
@@ -88,18 +110,15 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    private void registerUser(String firstname, String lastname, String email, String phone,
-                              String gender, String hashedPassword) {
+    private void registerUser(User user) {
 
         try(DatabaseHelper databaseHelper = new DatabaseHelper(this)) {
 
-            databaseHelper.registerNewUser(firstname, lastname, email, phone, gender,
-                    hashedPassword);
+            databaseHelper.registerNewUser(user);
 
         } catch(Exception e) {
             Log.d("db_helper", Objects.requireNonNull(e.getMessage()));
         }
-
 
     }
 }
