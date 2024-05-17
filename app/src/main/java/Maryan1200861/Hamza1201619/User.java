@@ -6,7 +6,6 @@ public class User {
 
     // firstname, lastname, email, gender, phone, hashed_password
 
-    private int id;
     private String firstname;
     private String lastname;
     private String email;
@@ -25,15 +24,6 @@ public class User {
 
     public User() {
 
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFirstname() {
@@ -88,7 +78,6 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "\nID= " + id +
                 "\nFirstname= " + firstname +
                 "\nLastname= " + lastname +
                 "\nEmail= " + email + '\n';

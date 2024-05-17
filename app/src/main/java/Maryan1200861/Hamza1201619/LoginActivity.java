@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         dbHelper = new DatabaseHelper(this);
-        prefsManager = new SharedPreferencesManager(this);
+        prefsManager = SharedPreferencesManager.getInstance(this);
 
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Load remembered
-        if (prefsManager.isRememberMe()) {
+        if (!prefsManager.getRememberedEmail().isEmpty()) {
             editTextEmail.setText(prefsManager.getRememberedEmail());
             checkBoxRememberMe.setChecked(true);
         }
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         if (authenticate(email, password)) {
             // Save or clear the email based on the Remember Me checkbox
             if (checkBoxRememberMe.isChecked()) {
-                prefsManager.setRememberMe(true, email);
+                prefsManager.setRememberMe(email);
             } else {
                 prefsManager.clearRememberMe();
             }

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "database2";
+    private static final String DATABASE_NAME = "database3";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TABLE_PIZZAS = "pizzas";
@@ -36,12 +36,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_CREATE_USERS =
             "CREATE TABLE " + TABLE_USERS + " (" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_USER_EMAIL + " TEXT UNIQUE NOT NULL, " +
+                    COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL, " +
                     COLUMN_USER_HASHED_PASSWORD + " TEXT NOT NULL, " +
                     COLUMN_USER_FIRSTNAME + " TEXT, " +
                     COLUMN_USER_LASTNAME + " TEXT, " +
-                    COLUMN_USER_PHONE + " TEXT NOT NULL, " +
+                    COLUMN_USER_PHONE + " TEXT UNIQUE NOT NULL, " +
                     COLUMN_USER_GENDER + ");";
 
     public DatabaseHelper(Context context) {
@@ -112,21 +111,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<User> getAllUsers() {
-        ArrayList<User> users = new ArrayList<User>();
+
+        ArrayList<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USERS;
         Cursor cursor = db.rawQuery(query, null);
 
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(0);
-            String email = cursor.getString(1);
-            String hashed_password = cursor.getString(2);
-            String firstname = cursor.getString(3);
-            String lastname = cursor.getString(4);
-            String phone = cursor.getString(5);
-            String gender = cursor.getString(6);
+            String email = cursor.getString(0);
+            String hashed_password = cursor.getString(1);
+            String firstname = cursor.getString(2);
+            String lastname = cursor.getString(3);
+            String phone = cursor.getString(4);
+            String gender = cursor.getString(5);
             User user = new User(firstname, lastname, email, gender, phone, hashed_password);
-            user.setId(id);
 
             users.add(user);
         }

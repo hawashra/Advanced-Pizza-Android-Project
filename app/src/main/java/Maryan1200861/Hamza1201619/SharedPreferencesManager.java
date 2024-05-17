@@ -16,19 +16,15 @@ public class SharedPreferencesManager {
         return instance;
     }
 
-    SharedPreferencesManager(Context context) {
+    private SharedPreferencesManager(Context context) {
         sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 
-    public void setRememberMe(boolean rememberMe, String email) {
-        editor.putBoolean("remember_me", rememberMe);
+    public void setRememberMe(String email) {
+        editor.putBoolean("remember_me", true);
         editor.putString("email", email);
         editor.apply();
-    }
-
-    public boolean isRememberMe() {
-        return sharedPreferences.getBoolean("remember_me", false);
     }
 
     public String getRememberedEmail() {
@@ -36,7 +32,6 @@ public class SharedPreferencesManager {
     }
 
     public void clearRememberMe() {
-        editor.remove("remember_me");
         editor.remove("email");
         editor.apply();
     }
