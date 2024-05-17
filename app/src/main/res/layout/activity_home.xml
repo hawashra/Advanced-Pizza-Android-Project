@@ -42,7 +42,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:tooltipText="Pizza main menu"/>
-                <!-- stick it to the top left using constraints -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

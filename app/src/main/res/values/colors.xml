@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="red">#8C0712</color>
+    <color name="dark_grey">#222326</color>
+    <color name="fresh_olive">#3E5902</color>
+    <color name="soft_orange">#F2A74B</color>
+    <color name="medium_red">#BF3617</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#0D0D0D</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="green">#4CAF50</color>
-    <color name="red">#BF0404</color>
-    <color name="orange">#F25C05</color>
-    <color name="soft_orange">#F2B872</color>
-    <color name="fresh_olive">#72A603</color>
 </resources>
