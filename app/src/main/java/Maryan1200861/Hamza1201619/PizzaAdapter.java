@@ -10,9 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHolder> {
 
     // Add your list of pizzas here
+
+    //FIXME: may not be final if the admin can add pizzas
+    private final ArrayList<Pizza> pizzas;
+
+    public PizzaAdapter(ArrayList<Pizza> pizzas) {
+        this.pizzas = pizzas;
+    }
 
     @NonNull
     @Override
@@ -24,6 +33,11 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     @Override
     //TODO: implement onBindViewHolder
     public void onBindViewHolder(@NonNull PizzaViewHolder holder, int position) {
+
+        Pizza pizza = pizzas.get(position);
+        holder.textViewPizzaName.setText(pizza.getName());
+        holder.imageViewPizza.setImageResource(R.drawable.pizza_image);
+
         // Bind your pizza data to the views here
     }
 
@@ -31,7 +45,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     //TODO: implement getItemCount
     public int getItemCount() {
         // Return the size of your pizza list here
-        return 0;
+        return pizzas.size();
     }
 
     static class PizzaViewHolder extends RecyclerView.ViewHolder {

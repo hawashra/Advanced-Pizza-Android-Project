@@ -2,6 +2,7 @@ package Maryan1200861.Hamza1201619;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -63,6 +64,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             without logging in again*/
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+        }
+        else if(itemId == R.id.nav_pizza_menu) {
+            PizzaMenuFragment pizzaMenuFragment = new PizzaMenuFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, pizzaMenuFragment) // Replace the current fragment with the new PizzaMenuFragment
+                    .commit();
+
+            Log.d("NAVIGATION", "Menu item selected: " + itemId);
+        }
+
+        else if (itemId == R.id.nav_home && !(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof HomeFragment)){
+            HomeFragment homeFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, homeFragment) // Replace the current fragment with the new HomeFragment
+                    .commit();
+
+            Log.d("NAVIGATION", "Menu item selected: " + itemId);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
