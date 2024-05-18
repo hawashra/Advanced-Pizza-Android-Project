@@ -8,34 +8,49 @@
             android:title="Home" />
 
         <item
-            android:id="@+id/nav_favorite"
-            android:icon="@drawable/favorite_icon"
-            android:title="favorite" />
+            android:id="@+id/nav_pizza_menu"
+            android:icon="@drawable/pizza_menu_icon"
+            android:title="Pizza Menu" />
+
+
+        <item
+            android:id="@+id/nav_special_offers"
+            android:icon="@drawable/special_offers_icon"
+            android:title="Special Offers" />
 
     </group>
 
+    <item android:title="Profile">
 
-        <item android:title="Profile">
-
-            <menu>
-                <group android:checkableBehavior="single">
+        <menu>
+            <group android:checkableBehavior="single">
 
                 <item
                     android:id="@+id/nav_profile"
                     android:icon="@drawable/profile_icon"
                     android:title="Profile" />
 
+
+                <item
+                    android:id="@+id/nav_favorite"
+                    android:icon="@drawable/favorite_icon"
+                    android:title="favorite" />
+
+                <item
+                    android:id="@+id/nav_history"
+                    android:icon="@drawable/history_icon"
+                    android:title="Previous orders" />
+
                 <item
                     android:id="@+id/nav_logout"
                     android:icon="@drawable/logout_icon"
                     android:title="Logout" />
 
-                </group>
+            </group>
 
-            </menu>
+        </menu>
 
-        </item>
-
+    </item>
 
 
     <item android:title="communicate">
@@ -43,14 +58,14 @@
         <menu>
 
             <!-- Uncomment this group if you want the communication section to be clickable. -->
-           <!-- <group android:checkableBehavior="single"> -->
+            <!-- <group android:checkableBehavior="single"> -->
 
             <item
                 android:id="@+id/nav_call_us"
                 android:icon="@drawable/call_us_icon"
                 android:title="Call Us" />
 
-           <!-- </group> -->
+            <!-- </group> -->
 
         </menu>
 

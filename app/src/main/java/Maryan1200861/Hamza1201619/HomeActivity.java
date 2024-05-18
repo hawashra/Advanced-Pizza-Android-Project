@@ -1,5 +1,6 @@
 package Maryan1200861.Hamza1201619;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -52,6 +53,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        int itemId = menuItem.getItemId();
+
+        if (itemId == R.id.nav_logout) {
+
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            /* Clear the back stack, so the user can't go back to the HomeActivity after logging out
+            without logging in again*/
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
