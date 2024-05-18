@@ -3,11 +3,18 @@ package Maryan1200861.Hamza1201619;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -18,6 +25,7 @@ import android.view.ViewGroup;
 public class PizzaMenuFragment extends Fragment {
 
     private RecyclerView recyclerView;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,12 +67,27 @@ public class PizzaMenuFragment extends Fragment {
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pizza_menu, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         // Set up your RecyclerView here (LayoutManager, Adapter, etc.)
+
+        // Create a new DatabaseHelper and get the list of pizzas
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+
+            ArrayList<Pizza> pizzas = databaseHelper.getAllPizzas();
+
+            // Set up your RecyclerView
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(new PizzaAdapter(pizzas));
+
+        } catch (Exception e) {
+            Log.d("db-error", Objects.requireNonNull(e.getMessage()));
+            Toast.makeText(getContext(), "An error occurred in retrieving pizzas from db",
+                    Toast.LENGTH_LONG).show();
+        }
+
         return view;
     }
 
