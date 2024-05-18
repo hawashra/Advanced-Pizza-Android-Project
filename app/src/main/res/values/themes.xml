@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary branding color -->
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryVariant">@color/medium_red</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary branding color -->
+        <item name="colorSecondary">@color/soft_orange</item>
+        <item name="colorSecondaryVariant">@color/fresh_olive</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Background color -->
+        <item name="android:colorBackground">@color/fresh_olive</item>
+        <item name="colorSurface">@color/fresh_olive</item>
+        <item name="colorOnSurface">@color/white</item>
+
+        <!-- Error color -->
+        <item name="colorError">@color/medium_red</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Control color for hints and other elements -->
+        <item name="colorControlNormal">@color/fresh_olive</item>
+    </style>
+
+    <!-- EditText styles -->
+    <style name="Widget.EditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/dark_grey</item>
+        <item name="android:textColor">@color/white</item> <!-- Text color for EditText -->
+        <item name="hintTextColor">@color/fresh_olive</item> <!-- Custom hint text color -->
+        <item name="android:textSize">20sp</item> <!-- Text size for EditText -->
+    </style>
+
+    <!-- TextView styles -->
+    <style name="Widget.TextView" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/white</item> <!-- Text color for TextView -->
+        <item name="android:textSize">16sp</item> <!-- Text size for TextView -->
+    </style>
+
+    <!-- CheckBox styles -->
+    <style name="Widget.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textColor">@color/white</item> <!-- Text color for CheckBox -->
+        <item name="android:textSize">16sp</item> <!-- Text size for CheckBox -->
+        <item name="android:buttonTint">@color/soft_orange</item> <!-- Tint color for CheckBox check -->
+    </style>
+
+</resources>
