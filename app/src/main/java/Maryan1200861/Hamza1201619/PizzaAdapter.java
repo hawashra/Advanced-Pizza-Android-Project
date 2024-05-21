@@ -90,4 +90,10 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
             buttonFavorite = itemView.findViewById(R.id.buttonFavorite);
         }
     }
+
+    public void updateData(ArrayList<Pizza> pizzas) {
+        this.pizzas.clear();
+        this.pizzas.addAll(pizzas);
+        notifyDataSetChanged();
+    }
 }

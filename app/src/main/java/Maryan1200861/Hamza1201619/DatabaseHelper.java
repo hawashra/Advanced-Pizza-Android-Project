@@ -284,5 +284,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<Pizza> getPizzasWithFilter(String filterType, String query) {
+        ArrayList<Pizza> pizzas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String columnName;
+        switch (filterType) {
+            case "Price":
+                columnName = COLUMN_PRICE;
+                break;
+            case "Size":
+                columnName = COLUMN_SIZE;
+                break;
+            case "Category":
+                columnName = COLUMN_PIZZA_CATEGORY;
+                break;
+            default:
+                return pizzas;
+        }
+
+        Cursor cursor = db.query(TABLE_PIZZAS, null, columnName + " LIKE ?", new String[]{"%" + query + "%"}, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String description = cursor.getString(2);
+            String category = cursor.getString(3);
+            int price = cursor.getInt(4);
+            String size = cursor.getString(5);
+            Pizza pizza = new Pizza(name, size, price, description, category);
+            pizza.setId(id);
+
+            // add the pizza to the list if it's not already there (name is unique)
+            // does not matter which size is added, as long as the name is the same
+            // the user can choose when ordering the pizza
+            if (!pizzas.contains(pizza)) {
+                pizzas.add(pizza);
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return pizzas;
+    }
+
+
 
 }
