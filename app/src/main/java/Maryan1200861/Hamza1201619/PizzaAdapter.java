@@ -6,8 +6,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -39,6 +41,34 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         holder.imageViewPizza.setImageResource(R.drawable.pizza_image);
 
         // Bind your pizza data to the views here
+        holder.buttonOrder.setOnClickListener(v -> {
+            // Handle button click here
+
+            Pizza clickedPizza = pizzas.get(holder.getAdapterPosition());
+
+
+            // Show the PizzaDetailsBottomSheetFragment
+            PizzaDetailsBottomSheetFragment.newInstance(clickedPizza)
+                    .show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), "pizzaDetailsBottomSheet");
+
+
+            Toast.makeText(v.getContext(),
+                    "You clicked on " + clickedPizza.getName(), Toast.LENGTH_SHORT).show();
+
+        });
+
+        holder.buttonFavorite.setOnClickListener(v -> {
+            // Handle favorite button click here
+
+            // Toggle the favorite status of the pizza
+            boolean isFavorite = UserManager.getInstance().toggleFavorite(pizza);
+
+            // Set the favorite icon based on the new status
+            holder.buttonFavorite.setImageResource(isFavorite ? R.drawable.fav_filled_icon :
+                    R.drawable.fav_outline_icon);
+
+        });
+
     }
 
     @Override
@@ -52,17 +82,15 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
 
         ImageView imageViewPizza;
         TextView textViewPizzaName;
-        Button buttonViewDetails;
+        Button buttonOrder;
+        ImageView buttonFavorite;
 
         public PizzaViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewPizza = itemView.findViewById(R.id.imageViewPizza);
             textViewPizzaName = itemView.findViewById(R.id.textViewPizzaName);
-            buttonViewDetails = itemView.findViewById(R.id.buttonViewDetails);
-
-            buttonViewDetails.setOnClickListener(v -> {
-                // Handle button click here
-            });
+            buttonOrder = itemView.findViewById(R.id.buttonOrder);
+            buttonFavorite = itemView.findViewById(R.id.buttonFavorite);
         }
     }
 }

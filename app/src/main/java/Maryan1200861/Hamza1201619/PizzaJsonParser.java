@@ -17,7 +17,7 @@ public class PizzaJsonParser {
             for (int i = 0; i < jsonArray.length(); i++) {
                 String name = jsonArray.getString(i);
                 // Create a new Pizza object with the name and an ID (index + 1)
-                Pizza pizza = new Pizza(i + 1, name);
+                Pizza pizza = new Pizza(name);
                 pizzas.add(pizza);
             }
         } catch (JSONException e) {

@@ -45,7 +45,7 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
                             String pizzaName = pizza.getName();
                             // if pizza name is not already in the database, add it
                             if (!databaseHelper.isPizzaInDatabase(pizzaName)) {
-                                databaseHelper.insert(pizzaName);
+                                databaseHelper.insertPizza(pizzaName);
                             }
                         }
                     } catch (Exception e) {
