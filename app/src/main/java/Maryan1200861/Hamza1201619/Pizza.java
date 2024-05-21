@@ -7,11 +7,63 @@ public class Pizza implements Serializable {
     private int id; // To uniquely identify each pizza
     private String name; // Name of the pizza type
 
-    private boolean favorite; // To keep track of the favorite status of the pizza
+    private String size;
 
-    // Constructor to initialize Pizza objects
-    public Pizza(String name) {
+    private int price;
+
+    private String description;
+
+    private String category;
+
+    // Constructor
+    public Pizza(String name, String size, int price, String description, String category) {
         this.name = name;
+        this.size = size;
+        this.price = price;
+        this.description = description;
+        this.category = category;
+
+    }
+
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     // Getter for ID

@@ -44,11 +44,7 @@ public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
             // TODO: Handle the "Order" button click
         });
 
-
     }
 
-    private boolean toggleFavorite(Pizza pizza) {
-        // TODO: Toggle the favorite status of the pizza and return the new status
-       return UserManager.getInstance().toggleFavorite(pizza);
-    }
+
 }

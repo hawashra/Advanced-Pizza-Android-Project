@@ -38,14 +38,18 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
             ((MainActivity) activity).setProgress(false);
 
             if (result != null && !result.isEmpty()) {
-                List<Pizza> pizzas = PizzaJsonParser.getObjectFromJson(result);
-                if (pizzas != null && !pizzas.isEmpty()) {
+                List<PizzaFactory> pizzasFactories = PizzaJsonParser.getObjectFromJson(result);
+                if (pizzasFactories != null && !pizzasFactories.isEmpty()) {
                     try (DatabaseHelper databaseHelper = new DatabaseHelper(activity)) {
-                        for (Pizza pizza : pizzas) {
-                            String pizzaName = pizza.getName();
+                        for (PizzaFactory pizzaFactory : pizzasFactories) {
+                            String pizzaName = pizzaFactory.getPizzaName();
                             // if pizza name is not already in the database, add it
                             if (!databaseHelper.isPizzaInDatabase(pizzaName)) {
-                                databaseHelper.insertPizza(pizzaName);
+                                databaseHelper.insertPizza(pizzaFactory.createPizzaSmall());
+                                databaseHelper.insertPizza(pizzaFactory.createPizzaMedium());
+                                databaseHelper.insertPizza(pizzaFactory.createPizzaLarge());
+
+
                             }
                         }
                     } catch (Exception e) {

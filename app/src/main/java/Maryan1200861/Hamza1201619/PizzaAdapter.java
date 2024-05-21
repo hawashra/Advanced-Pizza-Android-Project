@@ -44,16 +44,13 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         holder.buttonOrder.setOnClickListener(v -> {
             // Handle button click here
 
-            Pizza clickedPizza = pizzas.get(holder.getAdapterPosition());
-
-
             // Show the PizzaDetailsBottomSheetFragment
-            PizzaDetailsBottomSheetFragment.newInstance(clickedPizza)
+            PizzaDetailsBottomSheetFragment.newInstance(pizza)
                     .show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), "pizzaDetailsBottomSheet");
 
 
             Toast.makeText(v.getContext(),
-                    "You clicked on " + clickedPizza.getName(), Toast.LENGTH_SHORT).show();
+                    "You clicked on " + pizza.getName(), Toast.LENGTH_SHORT).show();
 
         });
 
@@ -61,7 +58,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
             // Handle favorite button click here
 
             // Toggle the favorite status of the pizza
-            boolean isFavorite = UserManager.getInstance().toggleFavorite(pizza);
+            boolean isFavorite = UserManager.getInstance().toggleFavorite(pizza.getName());
 
             // Set the favorite icon based on the new status
             holder.buttonFavorite.setImageResource(isFavorite ? R.drawable.fav_filled_icon :

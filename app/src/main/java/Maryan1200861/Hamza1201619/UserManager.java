@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class UserManager {
     private static UserManager instance;
     private User currentUser;
-    private static ArrayList<Pizza> favoritePizzas;
+    private static ArrayList<String> favoritePizzas;
 
     private UserManager() {}
 
@@ -25,25 +25,25 @@ public class UserManager {
         this.currentUser = currentUser;
     }
 
-    private void addFavoritePizza(Pizza pizza) {
-        favoritePizzas.add(pizza);
+    private void addFavoritePizza(String pizzaName) {
+        favoritePizzas.add(pizzaName);
     }
 
-    private void removeFavoritePizza(Pizza pizza) {
-        favoritePizzas.remove(pizza);
+    private void removeFavoritePizza(String pizzaName) {
+        favoritePizzas.remove(pizzaName);
     }
 
-    public void setFavoritePizzas(ArrayList<Pizza> favoritePizzas) {
+    public void setFavoritePizzas(ArrayList<String> favoritePizzas) {
         UserManager.favoritePizzas = favoritePizzas;
     }
 
 
-    public boolean toggleFavorite(Pizza pizza) {
-        if (favoritePizzas.contains(pizza)) {
-            removeFavoritePizza(pizza);
+    public boolean toggleFavorite(String pizzaName) {
+        if (favoritePizzas.contains(pizzaName)) {
+            removeFavoritePizza(pizzaName);
             return false;
         } else {
-            addFavoritePizza(pizza);
+            addFavoritePizza(pizzaName);
             return true;
         }
     }
