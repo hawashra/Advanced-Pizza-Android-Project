@@ -2,6 +2,7 @@ package Maryan1200861.Hamza1201619;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.AbstractCursor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,30 +10,65 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "database3";
+
+    public static int currentPizzaId = 0; // used to assign unique IDs to pizzas
+
+
+    private static final String DATABASE_NAME = "db2";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String TABLE_PIZZAS = "pizzas";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_PIZZA_NAME = "name";
+    // Table names
+    public static final String TABLE_PIZZAS = "Pizza";
+    public static final String TABLE_USERS = "User";
+    public static final String TABLE_ORDERS = "_Order";
+    public static final String TABLE_FAVORITES = "Favorite";
+    public static final String TABLE_SPECIAL_OFFERS = "SpecialOffer";
+    public static final String TABLE_ADMINS = "Admin";
 
-    public static final String TABLE_USERS = "users";
+
+    // Common column names
+    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_START_DATE = "start_date";
+    public static final String COLUMN_END_DATE = "end_date";
+    public static final String COLUMN_PRICE = "price";
+    public static final String COLUMN_SIZE = "size";
+    public static final String COLUMN_PIZZA_ID = "pizza_id";
+    public static final String COLUMN_OFFER_ID = "offer_id";
+    public static final String COLUMN_QUANTITY = "quantity";
+    public static final String COLUMN_TOTAL_PRICE = "total_price";
+    public static final String COLUMN_ORDER_DATE = "order_date";
+    public static final String COLUMN_FAVORITE_ID = "favorite_id";
+
+    public static final String COLUMN_ADMIN_ID = "admin_id";
+    public static final String COLUMN_EMAIL = "email";
+    public static final String COLUMN_PASSWORD = "password";
+    public static final String COLUMN_FIRST_NAME = "first_name";
+    public static final String COLUMN_LAST_NAME = "last_name";
+    public static final String COLUMN_PHONE_NUMBER = "phone_number";
+    public static final String COLUMN_PROFILE_PICTURE = "profile_picture";
+
+    // User specific column names
     public static final String COLUMN_USER_EMAIL = "email";
     public static final String COLUMN_USER_HASHED_PASSWORD = "hashed_password";
-
     public static final String COLUMN_USER_FIRSTNAME = "firstname";
-
     public static final String COLUMN_USER_LASTNAME = "lastname";
-
     public static final String COLUMN_USER_PHONE = "phone";
-
     public static final String COLUMN_USER_GENDER = "gender";
+    private static final String COLUMN_ORDER_ID = "order_id";
+    private static final String COLUMN_PIZZA_NAME = "pizza_name";
+    private static final String COLUMN_PIZZA_CATEGORY = "category";
 
 
+    // SQL Create statements
     private static final String TABLE_CREATE_PIZZAS =
             "CREATE TABLE " + TABLE_PIZZAS + " (" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_PIZZA_NAME + " TEXT NOT NULL);";
+                    COLUMN_PIZZA_ID + " INTEGER PRIMARY KEY, " +
+                    COLUMN_PIZZA_NAME + " TEXT NOT NULL," +
+                    COLUMN_DESCRIPTION + " TEXT," +
+                    COLUMN_PIZZA_CATEGORY + " TEXT NOT NULL," +
+                    COLUMN_PRICE + " REAL NOT NULL," +
+                    COLUMN_SIZE + " TEXT NOT NULL" + ");";
+
 
     private static final String TABLE_CREATE_USERS =
             "CREATE TABLE " + TABLE_USERS + " (" +
@@ -41,18 +77,77 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_USER_FIRSTNAME + " TEXT, " +
                     COLUMN_USER_LASTNAME + " TEXT, " +
                     COLUMN_USER_PHONE + " TEXT UNIQUE NOT NULL, " +
-                    COLUMN_USER_GENDER + ");";
+                    COLUMN_PROFILE_PICTURE + " BLOB, " +
+                    COLUMN_USER_GENDER + " TEXT);";
+
+    private static final String TABLE_CREATE_ORDERS =
+            "CREATE TABLE " + TABLE_ORDERS + " (" +
+                    COLUMN_ORDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    COLUMN_EMAIL + " TEXT NOT NULL," +
+                    COLUMN_ORDER_DATE + " TEXT NOT NULL," +
+                    COLUMN_TOTAL_PRICE + " REAL NOT NULL," +
+                    COLUMN_PIZZA_ID + " INTEGER NOT NULL," +
+                    COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 1," +
+
+                    "FOREIGN KEY (" + COLUMN_EMAIL + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_EMAIL + ")," +
+                    "FOREIGN KEY (" + COLUMN_ORDER_ID + ") REFERENCES " + TABLE_ORDERS + "(" + COLUMN_ORDER_ID + ")," +
+                    "FOREIGN KEY (" + COLUMN_PIZZA_ID + ") REFERENCES " + TABLE_PIZZAS + "(" + COLUMN_PIZZA_ID + ")" +
+
+                    ");";
+
+
+
+    private static final String TABLE_CREATE_FAVORITES =
+            "CREATE TABLE " + TABLE_FAVORITES + " (" +
+                    COLUMN_FAVORITE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    COLUMN_EMAIL + " TEXT NOT NULL," +
+                    COLUMN_PIZZA_ID + " INTEGER NOT NULL," +
+                    "FOREIGN KEY (" + COLUMN_EMAIL + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_EMAIL + ")," +
+                    "FOREIGN KEY (" + COLUMN_PIZZA_ID + ") REFERENCES " + TABLE_PIZZAS + "(" + COLUMN_PIZZA_ID + ")" +
+                    ");";
+
+    private static final String TABLE_CREATE_SPECIAL_OFFERS =
+            "CREATE TABLE " + TABLE_SPECIAL_OFFERS + " (" +
+                    COLUMN_OFFER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    COLUMN_PIZZA_ID + " INTEGER NOT NULL," +
+                    COLUMN_DESCRIPTION + " TEXT," +
+                    COLUMN_START_DATE + " TEXT NOT NULL," +
+                    COLUMN_END_DATE + " TEXT NOT NULL," +
+                    COLUMN_PRICE + " REAL NOT NULL," +
+                    "FOREIGN KEY (" + COLUMN_OFFER_ID + ") REFERENCES " + TABLE_SPECIAL_OFFERS + "(" + COLUMN_OFFER_ID + ")," +
+                    "FOREIGN KEY (" + COLUMN_PIZZA_ID + ") REFERENCES " + TABLE_PIZZAS + "(" + COLUMN_PIZZA_ID + ")" +
+
+                    ");";
+
+    private static final String TABLE_CREATE_ADMINS =
+            "CREATE TABLE " + TABLE_ADMINS + " (" +
+                    COLUMN_ADMIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    COLUMN_EMAIL + " TEXT UNIQUE NOT NULL," +
+                    COLUMN_PASSWORD + " TEXT NOT NULL," +
+                    COLUMN_FIRST_NAME + " TEXT NOT NULL," +
+                    COLUMN_LAST_NAME + " TEXT NOT NULL," +
+                    COLUMN_PHONE_NUMBER + " TEXT NOT NULL," +
+                    COLUMN_PROFILE_PICTURE + " BLOB" +
+                    ");";
+
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE_PIZZAS);
         db.execSQL(TABLE_CREATE_USERS);
+        db.execSQL(TABLE_CREATE_ORDERS);
+        db.execSQL(TABLE_CREATE_FAVORITES);
+        db.execSQL(TABLE_CREATE_SPECIAL_OFFERS);
+        db.execSQL(TABLE_CREATE_ADMINS);
     }
+
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -75,10 +170,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_USERS, null, contentValues);
     }
 
-    public void insert(String name) {
+    public void insertPizza(Pizza pizza) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValue = new ContentValues();
-        contentValue.put(DatabaseHelper.COLUMN_PIZZA_NAME, name);
+        contentValue.put(DatabaseHelper.COLUMN_PIZZA_NAME, pizza.getName());
+        contentValue.put(DatabaseHelper.COLUMN_DESCRIPTION, pizza.getDescription());
+        contentValue.put(DatabaseHelper.COLUMN_PIZZA_CATEGORY, pizza.getCategory());
+        contentValue.put(DatabaseHelper.COLUMN_PRICE, pizza.getPrice());
+        contentValue.put(DatabaseHelper.COLUMN_SIZE, pizza.getSize());
+        currentPizzaId++;
         db.insert(DatabaseHelper.TABLE_PIZZAS, null, contentValue);
     }
 
@@ -89,11 +189,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_PIZZAS;
         Cursor cursor = db.rawQuery(query, null);
 
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
             String name = cursor.getString(1);
-            Pizza pizza = new Pizza(id, name);
-            pizzas.add(pizza);
+            String description = cursor.getString(2);
+            String category = cursor.getString(3);
+            int price = cursor.getInt(4);
+            String size = cursor.getString(5);
+            Pizza pizza = new Pizza(name,size, price, description, category);
+            pizza.setId(id);
+
+            // add the pizza to the list if it's not already there (name is unique)
+            // does not matter which size is added, as long as the name is the same
+            // the user can choose when ordering the pizza
+            if (!pizzas.contains(pizza)) {
+                pizzas.add(pizza);
+            }
+
         }
         cursor.close();
         db.close();
@@ -101,9 +213,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return pizzas;
     }
 
-    public boolean isPizzaInDatabase(String name) {
+    public boolean isPizzaInDatabase(String pizzaName) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PIZZAS + " WHERE " + COLUMN_PIZZA_NAME + " = ?", new String[]{name});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PIZZAS + " WHERE " + COLUMN_PIZZA_NAME + " = ?", new String[]{pizzaName});
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         db.close();
@@ -132,4 +244,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return users;
     }
+
+    public User getUserByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_EMAIL + " = ?", new String[]{email});
+        User user = null;
+        if (cursor.moveToFirst()) {
+            String hashed_password = cursor.getString(1);
+            String firstname = cursor.getString(2);
+            String lastname = cursor.getString(3);
+            String phone = cursor.getString(4);
+
+            user = new User(firstname, lastname, email, null, phone, hashed_password);
+        }
+
+        cursor.close();
+        db.close();
+        return user;
+    }
+
+    public ArrayList<String> getFavoritePizzas(String userEmail) {
+        ArrayList<String> pizzasNames = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_PIZZAS +
+                " INNER JOIN " + TABLE_FAVORITES +
+                " ON " + TABLE_PIZZAS + "." + COLUMN_PIZZA_ID + " = " + TABLE_FAVORITES + "." + COLUMN_PIZZA_ID +
+                " WHERE " + TABLE_FAVORITES + "." + COLUMN_EMAIL + " = ? AND " + TABLE_PIZZAS + "." + COLUMN_PIZZA_NAME;
+
+        Cursor cursor = db.rawQuery(query, new String[]{userEmail});
+
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(1);
+            pizzasNames.add(name);
+        }
+        cursor.close();
+        db.close();
+
+        return pizzasNames;
+    }
+
+
+
 }
