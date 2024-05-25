@@ -1,25 +1,72 @@
 package Maryan1200861.Hamza1201619;
 
-public class Pizza {
+import java.io.Serializable;
+
+public class Pizza implements Serializable {
 
     private int id; // To uniquely identify each pizza
     private String name; // Name of the pizza type
 
-    // Constructor to initialize Pizza objects
-    public Pizza(int id, String name) {
-        this.id = id;
+    private String size;
+
+    private int price;
+
+    private String description;
+
+    private String category;
+
+    // Constructor
+    public Pizza(String name, String size, int price, String description, String category) {
         this.name = name;
+        this.size = size;
+        this.price = price;
+        this.description = description;
+        this.category = category;
+
     }
 
-    // Getter for ID
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public int getId() {
         return id;
     }
 
-    // Setter for ID
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    // Getter for ID
 
     // Getter for Name
     public String getName() {
@@ -35,8 +82,20 @@ public class Pizza {
     @Override
     public String toString() {
         return "Pizza{" +
-                "\nID= " + id +
                 "\nName= " + name +
                 "\n}";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Pizza pizza = (Pizza) obj;
+        return name.equals(pizza.name);
+    }
+
 }

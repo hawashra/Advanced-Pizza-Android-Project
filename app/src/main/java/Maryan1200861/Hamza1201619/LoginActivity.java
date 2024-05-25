@@ -63,11 +63,38 @@ public class LoginActivity extends AppCompatActivity {
                 prefsManager.clearRememberMe();
             }
 
+            setUserManagerInstance(email);
+
+            // Set the user's favorite pizzas from the database
+            setUserManagerFavoritePizzas();
+
+
             // Proceed to special menu activity or dashboard
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
         } else {
             Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setUserManagerFavoritePizzas() {
+        try(DatabaseHelper databaseHelper = new DatabaseHelper(this)) {
+            UserManager.getInstance().setFavoritePizzas(databaseHelper.getFavoritePizzas(UserManager.getInstance().getCurrentUser().getEmail()));
+        } catch (Exception e) {
+            Log.d("db-error", Objects.requireNonNull(e.getMessage()));
+            Toast.makeText(this, "An error occurred in retrieving favorite pizzas from db",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void setUserManagerInstance(String email) {
+        try(DatabaseHelper databaseHelper = new DatabaseHelper(this)) {
+            User user = databaseHelper.getUserByEmail(email);
+            UserManager.getInstance().setCurrentUser(user);
+        } catch (Exception e) {
+            Log.d("db-error", Objects.requireNonNull(e.getMessage()));
+            Toast.makeText(this, "An error occurred in retrieving user from db",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
