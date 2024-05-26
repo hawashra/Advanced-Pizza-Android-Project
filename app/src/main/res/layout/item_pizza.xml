@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -16,13 +17,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="16sp"
-        android:paddingStart="16dp" />
+        android:fontFamily="@font/baloo"
+        android:paddingStart="16dp"
+        android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/buttonViewDetails"
+    <ImageView
+        android:id="@+id/buttonFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show details" />
+        android:layout_gravity="end"
+        android:paddingTop="12dp"
+        android:paddingRight="12dp"
+        android:src="@drawable/fav_outline_icon" />
+
+    <Button
+        android:id="@+id/buttonOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order now" />
 
 </LinearLayout>

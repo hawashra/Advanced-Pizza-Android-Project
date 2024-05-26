@@ -83,6 +83,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Log.d("NAVIGATION", "Menu item selected: " + itemId);
         }
 
+        else if (itemId == R.id.nav_special_offers && !(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof SpecialOffersFragment)){
+            SpecialOffersFragment specialOffersFragment = new SpecialOffersFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, specialOffersFragment) // Replace the current fragment with the new SpecialOffersFragment
+                    .commit();
+
+            Log.d("NAVIGATION", "Menu item selected: " + itemId);
+        }
+
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

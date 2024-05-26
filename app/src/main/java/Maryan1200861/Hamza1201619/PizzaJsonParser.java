@@ -1,5 +1,7 @@
 package Maryan1200861.Hamza1201619;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,8 +10,8 @@ import java.util.List;
 
 public class PizzaJsonParser {
     // Parses a JSON string to create a list of Pizza objects.
-    public static List<Pizza> getObjectFromJson(String json) {
-        List<Pizza> pizzas = new ArrayList<>();
+    public static List<PizzaFactory> getObjectFromJson(String json) {
+        List<PizzaFactory> pizzasFactories = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray("types");
@@ -17,13 +19,13 @@ public class PizzaJsonParser {
             for (int i = 0; i < jsonArray.length(); i++) {
                 String name = jsonArray.getString(i);
                 // Create a new Pizza object with the name and an ID (index + 1)
-                Pizza pizza = new Pizza(i + 1, name);
-                pizzas.add(pizza);
+                PizzaFactory pizzaFactory = new PizzaFactory(name);
+                pizzasFactories.add(pizzaFactory);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.d("PizzaJsonParser", "getObjectFromJson: " + e.getMessage());
             return null;
         }
-        return pizzas;
+        return pizzasFactories;
     }
 }

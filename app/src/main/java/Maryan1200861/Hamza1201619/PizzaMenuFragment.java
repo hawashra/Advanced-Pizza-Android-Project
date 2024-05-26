@@ -6,10 +6,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ import java.util.Objects;
 public class PizzaMenuFragment extends Fragment {
 
     private RecyclerView recyclerView;
+
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -88,7 +94,48 @@ public class PizzaMenuFragment extends Fragment {
                     Toast.LENGTH_LONG).show();
         }
 
+        EditText editTextSearch = view.findViewById(R.id.editTextSearch);
+        Spinner spinnerFilterType = view.findViewById(R.id.spinnerFilterType);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.filter_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFilterType.setAdapter(adapter);
+
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String filterType = spinnerFilterType.getSelectedItem().toString();
+                filterPizzaList(filterType, s.toString());
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         return view;
+    }
+
+    private void filterPizzaList(String filterType, String query) {
+        // Create a new DatabaseHelper and get the filtered list of pizzas
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+            ArrayList<Pizza> filteredPizzas = databaseHelper.getPizzasWithFilter(filterType, query);
+
+            // Get the RecyclerView's adapter and update the data
+            PizzaAdapter pizzaAdapter = (PizzaAdapter) recyclerView.getAdapter();
+            if (pizzaAdapter != null) {
+                pizzaAdapter.updateData(filteredPizzas);
+            }
+
+        } catch (Exception e) {
+            Log.d("db-error", Objects.requireNonNull(e.getMessage()));
+            Toast.makeText(getContext(), "An error occurred in retrieving pizzas from db",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
 }
