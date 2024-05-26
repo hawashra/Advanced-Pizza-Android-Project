@@ -2,18 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:textAlignment="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="24dp"
-    >
+    android:background="#FFFFFF">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:background="@color/red"
         android:text="Login Page"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textAlignment="center"
+        android:paddingTop="40dp"
         android:layout_marginBottom="20dp"
         style="@style/Widget.TextView"/>
+
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -21,9 +26,13 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:padding="10dp"
-        style="@style/Widget.EditText"
-        android:layout_marginBottom="16dp" />
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="8dp" />
+
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -31,24 +40,28 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
-        style="@style/Widget.EditText"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:padding="10dp"
-        android:layout_marginBottom="16dp"/>
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="8dp"/>
 
     <CheckBox
         android:id="@+id/checkBoxRememberMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Remember me"
-        style="@style/Widget.CheckBox"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:buttonTint="#000"/>
 
     <Button
         android:id="@+id/buttonSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="55dp"
         android:text="SIGN IN"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="8dp"/>
 
     <TextView
         android:id="@+id/textViewSignUp"
@@ -56,9 +69,10 @@
         android:layout_height="wrap_content"
         android:text="Don't have an account yet? SIGN UP"
         android:gravity="center"
+        android:textColor="@color/red"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
-        style="@style/Widget.TextView"
+        android:textSize="15sp"
         />
 
 </LinearLayout>
