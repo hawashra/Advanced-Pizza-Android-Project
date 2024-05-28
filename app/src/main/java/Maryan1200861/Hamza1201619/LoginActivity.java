@@ -25,12 +25,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+
         dbHelper = new DatabaseHelper(this);
         prefsManager = SharedPreferencesManager.getInstance(this);
 
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         checkBoxRememberMe = findViewById(R.id.checkBoxRememberMe);
+
+        if (getIntent().getBooleanExtra("clearPassword", false)) {
+            editTextPassword.setText("");
+        }
 
         try {
             Intent intent = getIntent();
@@ -121,4 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         dbHelper.close();
         super.onDestroy();
     }
+
+
 }

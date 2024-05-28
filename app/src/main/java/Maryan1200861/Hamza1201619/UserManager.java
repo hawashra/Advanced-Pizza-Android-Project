@@ -37,7 +37,6 @@ public class UserManager {
         UserManager.favoritePizzas = favoritePizzas;
     }
 
-
     public boolean toggleFavorite(String pizzaName) {
         if (favoritePizzas.contains(pizzaName)) {
             removeFavoritePizza(pizzaName);
@@ -48,5 +47,7 @@ public class UserManager {
         }
     }
 
-
+    public void clearCurrentUser() {
+        this.currentUser = null;
+    }
 }

@@ -31,6 +31,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
 
 
+        // Set HomeFragment as the default fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new HomeFragment())
+                .commit();
+
 
         // ----------------- Navigation Drawer Menu -----------------
         navigationView.bringToFront();
@@ -47,8 +52,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
+
         } else {
-            super.onBackPressed();
+                getSupportFragmentManager().popBackStack();
         }
     }
 
@@ -60,8 +66,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (itemId == R.id.nav_logout) {
 
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            /* Clear the back stack, so the user can't go back to the HomeActivity after logging out
-            without logging in again*/
+        /* Clear the back stack, so the user can't go back to the HomeActivity after logging out
+        without logging in again*/
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
@@ -69,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             PizzaMenuFragment pizzaMenuFragment = new PizzaMenuFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, pizzaMenuFragment) // Replace the current fragment with the new PizzaMenuFragment
+                    .addToBackStack(null) // Add this transaction to the back stack
                     .commit();
 
             Log.d("NAVIGATION", "Menu item selected: " + itemId);
@@ -78,6 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             HomeFragment homeFragment = new HomeFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, homeFragment) // Replace the current fragment with the new HomeFragment
+                    .addToBackStack(null) // Add this transaction to the back stack
                     .commit();
 
             Log.d("NAVIGATION", "Menu item selected: " + itemId);
@@ -87,6 +95,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             SpecialOffersFragment specialOffersFragment = new SpecialOffersFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, specialOffersFragment) // Replace the current fragment with the new SpecialOffersFragment
+                    .addToBackStack(null) // Add this transaction to the back stack
                     .commit();
 
             Log.d("NAVIGATION", "Menu item selected: " + itemId);
@@ -95,4 +104,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

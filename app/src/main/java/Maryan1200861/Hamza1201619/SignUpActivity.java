@@ -40,37 +40,42 @@ public class SignUpActivity extends AppCompatActivity {
         spinnerGender.setAdapter(adapter);
 
         buttonCreateAccount.setOnClickListener(v -> {
-            if (validateInputs()) {
-                String hashedPassword = HashPassword.hashPassword(editTextPassword.getText().toString(), this);
 
-                User user1 = new User();
-                user1.setEmail(editTextEmail.getText().toString());
-                user1.setFirstname(editTextFirstName.getText().toString());
-                user1.setLastname(editTextLastName.getText().toString());
-                user1.setPhone(editTextPhone.getText().toString());
-                user1.setGender(spinnerGender.getSelectedItem().toString());
-                user1.setHashedPassword(hashedPassword);
+            try(DatabaseHelper databaseHelper = new DatabaseHelper(this)) {
 
-                registerUser(user1);
+                if (databaseHelper.userExists(editTextEmail.getText().toString().trim(),
+                        editTextPhone.getText().toString().trim())) {
 
-                Intent signInIntent = new Intent(SignUpActivity.this, LoginActivity.class);
+                    Toast.makeText(this, "Email or phone number already used", Toast.LENGTH_SHORT).show();
+                } else if (validateInputs()) {
+                    String hashedPassword = HashPassword.hashPassword(editTextPassword.getText().toString(), this);
 
-                signInIntent.putExtra("email", editTextEmail.getText().toString());
-                startActivity(signInIntent);
+                    User user1 = new User();
+                    user1.setEmail(editTextEmail.getText().toString());
+                    user1.setFirstname(editTextFirstName.getText().toString());
+                    user1.setLastname(editTextLastName.getText().toString());
+                    user1.setPhone(editTextPhone.getText().toString());
+                    user1.setGender(spinnerGender.getSelectedItem().toString());
+                    user1.setHashedPassword(hashedPassword);
 
-                //NOTE: FOR DEBUGGING PURPOSES ONLY
-               try(DatabaseHelper databaseHelper = new DatabaseHelper(this)) {
+                    registerUser(user1);
 
-                   ArrayList<User> allUsers = databaseHelper.getAllUsers();
+                    Intent signInIntent = new Intent(SignUpActivity.this, LoginActivity.class);
 
-                   for (User user : allUsers) {
-                       Log.d("User", user.getEmail());
-                   }
+                    signInIntent.putExtra("email", editTextEmail.getText().toString());
+                    startActivity(signInIntent);
 
-               } catch (Exception e) {
-                   Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-               }
+                    //NOTE: FOR DEBUGGING PURPOSES ONLY
 
+                    ArrayList<User> allUsers = databaseHelper.getAllUsers();
+
+                    for (User user : allUsers) {
+                        Log.d("User", user.getEmail());
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.d("db_error", Objects.requireNonNull(e.getMessage()));
             }
 
         });

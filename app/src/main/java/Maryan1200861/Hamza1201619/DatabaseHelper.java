@@ -329,6 +329,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return pizzas;
     }
 
-
+    public boolean userExists(String email, String phone) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_EMAIL + " = ? OR " + COLUMN_USER_PHONE + " = ?", new String[]{email, phone});
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
 
 }
