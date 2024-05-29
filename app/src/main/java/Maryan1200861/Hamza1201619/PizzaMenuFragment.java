@@ -1,5 +1,6 @@
 package Maryan1200861.Hamza1201619;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -29,7 +30,7 @@ import java.util.Objects;
  */
 public class PizzaMenuFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private static RecyclerView recyclerView;
 
 
 
@@ -109,7 +110,7 @@ public class PizzaMenuFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String filterType = spinnerFilterType.getSelectedItem().toString();
-                filterPizzaList(filterType, s.toString());
+                filterPizzaList(filterType, s.toString(), getContext());
             }
 
 
@@ -120,9 +121,9 @@ public class PizzaMenuFragment extends Fragment {
         return view;
     }
 
-    private void filterPizzaList(String filterType, String query) {
+    public static void filterPizzaList(String filterType, String query, Context context) {
         // Create a new DatabaseHelper and get the filtered list of pizzas
-        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+        try (DatabaseHelper databaseHelper = new DatabaseHelper(context)) {
             ArrayList<Pizza> filteredPizzas = databaseHelper.getPizzasWithFilter(filterType, query);
 
             // Get the RecyclerView's adapter and update the data
@@ -133,7 +134,7 @@ public class PizzaMenuFragment extends Fragment {
 
         } catch (Exception e) {
             Log.d("db-error", Objects.requireNonNull(e.getMessage()));
-            Toast.makeText(getContext(), "An error occurred in retrieving pizzas from db",
+            Toast.makeText(context, "An error occurred in retrieving pizzas from db",
                     Toast.LENGTH_LONG).show();
         }
     }

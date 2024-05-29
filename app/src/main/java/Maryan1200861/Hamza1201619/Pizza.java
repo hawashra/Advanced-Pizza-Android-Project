@@ -25,6 +25,10 @@ public class Pizza implements Serializable {
 
     }
 
+    public Pizza() {
+
+    }
+
 
     public String getCategory() {
         return category;

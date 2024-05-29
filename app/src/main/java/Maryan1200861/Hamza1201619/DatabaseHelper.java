@@ -286,49 +286,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Pizza> getPizzasWithFilter(String filterType, String query) {
         ArrayList<Pizza> pizzas = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        String columnName;
-        switch (filterType) {
-            case "Price":
-                columnName = COLUMN_PRICE;
-                break;
-            case "Size":
-                columnName = COLUMN_SIZE;
-                break;
-            case "Category":
-                columnName = COLUMN_PIZZA_CATEGORY;
-                break;
-            default:
-                return pizzas;
+        // Open the database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Define the query
+        String selectQuery;
+
+        if (filterType.equals("price")) {
+            // Convert the query to a number
+            double priceQuery = Double.parseDouble(query);
+
+            selectQuery = "SELECT * FROM " + TABLE_PIZZAS + " WHERE " + COLUMN_PRICE + " <= " + priceQuery;
+        } else {
+            selectQuery = "SELECT * FROM " + TABLE_PIZZAS + " WHERE " + filterType.toLowerCase() + " LIKE '%" + query + "%'";
         }
 
-        Cursor cursor = db.query(TABLE_PIZZAS, null, columnName + " LIKE ?", new String[]{"%" + query + "%"}, null, null, null);
+        // Execute the query
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(0);
-            String name = cursor.getString(1);
-            String description = cursor.getString(2);
-            String category = cursor.getString(3);
-            int price = cursor.getInt(4);
-            String size = cursor.getString(5);
-            Pizza pizza = new Pizza(name, size, price, description, category);
-            pizza.setId(id);
+        // Loop through the results and create Pizza objects
+        if (cursor.moveToFirst()) {
+            do {
+                Pizza pizza = new Pizza();
+                pizza.setId(cursor.getInt(0));
+                pizza.setName(cursor.getString(1));
+                pizza.setPrice(cursor.getInt(2));
+                // ... set the other properties ...
 
-            // add the pizza to the list if it's not already there (name is unique)
-            // does not matter which size is added, as long as the name is the same
-            // the user can choose when ordering the pizza
-            if (!pizzas.contains(pizza)) {
                 pizzas.add(pizza);
-            }
+            } while (cursor.moveToNext());
         }
 
+        // Close the cursor and the database
         cursor.close();
         db.close();
 
         return pizzas;
     }
-
     public boolean userExists(String email, String phone) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_EMAIL + " = ? OR " + COLUMN_USER_PHONE + " = ?", new String[]{email, phone});
