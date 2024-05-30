@@ -5,38 +5,57 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center_horizontal"
-    android:background="@drawable/backgroundpizza"
-    >
+    android:background="@drawable/backgroundmain">
+
+    <TextView
+        android:id="@+id/ResName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="480dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textSize="50dp"
+        android:fontFamily="@font/custom_font"
+        android:text="Pizzamania"
+        android:textColor="@color/red" />
 
     <TextView
         android:id="@+id/textViewDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="The best restaurant that offers delicious and healthy food in town. Place an order and get it delivered within 2 hours irrespective of your location."
+        android:text="Welcome to the best pizza in town. Get ready to taste the world's most delectable food."
         android:gravity="center"
-        android:layout_marginTop="200dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
-        android:background="#AAFFFFFF"
         android:textColor="#000000"
         android:textSize="17dp"
         android:layout_centerInParent="true"
         android:padding="10dp"/>
 
-    <Button
-        android:id="@+id/buttonSignIn"
-        android:layout_width="160dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign In"
-        android:background="#4CAF50"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
 
-    <Button
-        android:id="@+id/buttonSignUp"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:text="Sign Up"
-        android:background="#4CAF50"
-        android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/buttonSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign In"
+            android:background="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/buttonSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:background="#4CAF50"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
 
 </LinearLayout>
