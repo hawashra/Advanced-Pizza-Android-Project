@@ -18,17 +18,17 @@ public class PizzaFactory {
 
     public Pizza createPizzaSmall() {
         String category = getPizzaCategory(pizzaName);
-        return new Pizza(pizzaName, "Small", 10, pizzaName + " small size", category);
+        return new Pizza(pizzaName + " Small", "Small", 10, pizzaName + " small size", category);
     }
 
     public Pizza createPizzaMedium() {
         String category = getPizzaCategory(pizzaName);
-        return new Pizza(pizzaName, "Medium", 15, pizzaName + " medium size", category);
+        return new Pizza(pizzaName + " Medium", "Medium", 15, pizzaName + " medium size", category);
     }
 
     public Pizza createPizzaLarge() {
         String category = getPizzaCategory(pizzaName);
-        return new Pizza(pizzaName, "Large", 20, pizzaName + " large size", category);
+        return new Pizza(pizzaName + " Large", "Large", 20, pizzaName + " large size", category);
     }
 
 

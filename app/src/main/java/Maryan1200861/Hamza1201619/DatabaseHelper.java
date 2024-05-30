@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static int currentPizzaId = 0; // used to assign unique IDs to pizzas
 
 
-    private static final String DATABASE_NAME = "db2";
+    private static final String DATABASE_NAME = "db3";
     private static final int DATABASE_VERSION = 1;
 
     // Table names

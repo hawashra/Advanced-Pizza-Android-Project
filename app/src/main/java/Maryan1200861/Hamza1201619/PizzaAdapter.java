@@ -46,7 +46,8 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
 
             // Show the PizzaDetailsBottomSheetFragment
             PizzaDetailsBottomSheetFragment.newInstance(pizza)
-                    .show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), "pizzaDetailsBottomSheet");
+                    .show(((FragmentActivity) v.getContext()).getSupportFragmentManager(),
+                            "pizzaDetailsBottomSheet");
 
 
             Toast.makeText(v.getContext(),
