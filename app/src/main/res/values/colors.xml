@@ -6,5 +6,6 @@
     <color name="soft_orange">#F2A74B</color>
     <color name="medium_red">#BF3617</color>
     <color name="white">#FFFFFF</color>
-    <color name="black">#0D0D0D</color>
+    <color name="black">#000000</color>
+    <color name="grey">#b3b3b3</color>
 </resources>

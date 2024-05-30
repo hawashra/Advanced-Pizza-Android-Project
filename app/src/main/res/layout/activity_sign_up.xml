@@ -1,118 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:gravity="center_horizontal">
+    android:padding="16dp"
+    android:background="@color/red">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginBottom="20dp"
-        android:background="@color/red"
-        android:paddingTop="40dp"
-        android:text="Create new account"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp" />
-
-    <EditText
-        android:id="@+id/editTextFirstName"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+    <!-- Create Account Form Container -->
+    <LinearLayout
+        android:background="@drawable/rounded_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="First Name"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:elevation="4dp">
 
-    <EditText
-        android:id="@+id/editTextLastName"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Last Name"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginBottom="8dp"/>
+        <!-- Header Text -->
 
-    <EditText
-        android:id="@+id/editTextEmail"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginBottom="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create New Account"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"
+            android:layout_marginBottom="20dp" />
 
-    <EditText
-        android:id="@+id/editTextPhone"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone Number"
-        android:inputType="phone"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginBottom="8dp"/>
+        <!-- First Name Field -->
+        <EditText
+            android:id="@+id/editTextFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="First Name"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
 
-    <Spinner
-        android:id="@+id/spinnerGender"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"/>
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginBottom="8dp"/>
+        <!-- Last Name Field -->
+        <EditText
+            android:id="@+id/editTextLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="Last Name"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
 
-    <EditText
-        android:id="@+id/editTextConfirmPassword"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"
-        android:background="@drawable/edit_text_background"
-        android:padding="10dp"
-        android:layout_marginBottom="16dp"/>
+        <!-- Email Field -->
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
 
-    <Button
-        android:id="@+id/buttonCreateAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CREATE ACCOUNT"
-        android:background="@color/red"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="8dp"/>
+        <!-- Phone Number Field -->
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="By signing up you agree to the terms of service and privacy policy"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:textColor="@color/red"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp"/>
+        <!-- Gender Spinner -->
+        <Spinner
+            android:id="@+id/spinnerGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"
+            android:textColor="@color/black" />
 
-</LinearLayout>
+        <!-- Password Field -->
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
+
+        <!-- Confirm Password Field -->
+        <EditText
+            android:id="@+id/editTextConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_border"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey" />
+
+        <!-- Create Account Button -->
+        <Button
+            android:id="@+id/buttonCreateAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CREATE ACCOUNT"
+            android:backgroundTint="#000"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Terms of Service Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By signing up you agree to the terms of service and privacy policy"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textColor="@color/red"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+</RelativeLayout>
