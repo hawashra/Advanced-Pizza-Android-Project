@@ -44,12 +44,10 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
                         for (PizzaFactory pizzaFactory : pizzasFactories) {
                             String pizzaName = pizzaFactory.getPizzaName();
                             // if pizza name is not already in the database, add it
-                            if (!databaseHelper.isPizzaInDatabase(pizzaName)) {
+                            if (!databaseHelper.isPizzaInDatabase(pizzaName + " Small")) {
                                 databaseHelper.insertPizza(pizzaFactory.createPizzaSmall());
                                 databaseHelper.insertPizza(pizzaFactory.createPizzaMedium());
                                 databaseHelper.insertPizza(pizzaFactory.createPizzaLarge());
-
-
                             }
                         }
                     } catch (Exception e) {

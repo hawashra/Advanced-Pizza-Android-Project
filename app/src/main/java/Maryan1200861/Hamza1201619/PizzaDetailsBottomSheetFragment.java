@@ -1,9 +1,11 @@
 package Maryan1200861.Hamza1201619;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.Objects;
 
 public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
 
@@ -29,9 +33,11 @@ public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.fragment_pizza_details_bottom_sheet, container, false);
 
         // Get the Pizza object from the arguments
-        Pizza pizza = null;
+        Pizza pizza;
         if (getArguments() != null) {
             pizza = (Pizza) getArguments().getSerializable(ARG_PIZZA);
+        } else {
+            pizza = null;
         }
 
         // Populate the views with the pizza details
@@ -45,6 +51,9 @@ public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
             textViewPizzaPrice.setText(String.valueOf(pizza.getPrice()));
         }
 
+
+
+
         return view;
     }
 
@@ -57,10 +66,35 @@ public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
         Pizza pizza = (Pizza) getArguments().getSerializable(ARG_PIZZA);
 
         // TODO: Display the pizza details in the views
+        if (pizza != null) {
+            // Get the views
+            ImageView imageViewPizza = view.findViewById(R.id.imageViewPizza);
+            TextView textViewPizzaName = view.findViewById(R.id.textViewPizzaName);
+            TextView textViewPizzaDescription = view.findViewById(R.id.textViewPizzaDescription);
+            TextView textViewPizzaPrice = view.findViewById(R.id.textViewPizzaPrice);
+
+            // Set the pizza image, name, description, and price
+            //imageViewPizza.setImageResource(pizza.getImageResourceId());
+            textViewPizzaName.setText(pizza.getName());
+            textViewPizzaDescription.setText(pizza.getDescription());
+            textViewPizzaPrice.setText(String.valueOf(pizza.getPrice()));
+        }
 
         // Set an OnClickListener for the "Order" button
         view.findViewById(R.id.buttonOrder).setOnClickListener(v -> {
             // TODO: Handle the "Order" button click
+            try (DatabaseHelper db = new DatabaseHelper(v.getContext())) {
+                // Insert the order into the database
+                String email = UserManager.getInstance().getCurrentUser().getEmail();
+                assert pizza != null;
+                int pizzaId = pizza.getId();
+                int quantity = 1;
+                double price = pizza.getPrice();
+                db.orderPizza(email, pizzaId, quantity, price*quantity);
+
+            } catch (Exception e) {
+                Log.d("order_error_db", Objects.requireNonNull(e.getMessage()));
+            }
         });
 
     }

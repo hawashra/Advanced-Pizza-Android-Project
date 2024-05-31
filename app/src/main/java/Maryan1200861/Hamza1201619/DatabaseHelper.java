@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -14,13 +15,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static int currentPizzaId = 0; // used to assign unique IDs to pizzas
 
 
-    private static final String DATABASE_NAME = "db3";
+    private static final String DATABASE_NAME = "db4";
     private static final int DATABASE_VERSION = 1;
 
     // Table names
     public static final String TABLE_PIZZAS = "Pizza";
     public static final String TABLE_USERS = "User";
-    public static final String TABLE_ORDERS = "_Order";
+    public static final String TABLE_ORDERS = "orders";
     public static final String TABLE_FAVORITES = "Favorite";
     public static final String TABLE_SPECIAL_OFFERS = "SpecialOffer";
     public static final String TABLE_ADMINS = "Admin";
@@ -65,12 +66,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_CREATE_PIZZAS =
             "CREATE TABLE " + TABLE_PIZZAS + " (" +
                     COLUMN_PIZZA_ID + " INTEGER PRIMARY KEY, " +
-                    COLUMN_PIZZA_NAME + " TEXT NOT NULL," +
+                    COLUMN_PIZZA_NAME + " TEXT NOT NULL UNIQUE," +
                     COLUMN_DESCRIPTION + " TEXT," +
                     COLUMN_PIZZA_CATEGORY + " TEXT NOT NULL," +
                     COLUMN_PRICE + " REAL NOT NULL," +
                     COLUMN_SIZE + " TEXT NOT NULL" + ");";
 
+
+    private static final String TABLE_CREATE_ORDER =
+            "CREATE TABLE orders (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_EMAIL + " TEXT NOT NULL, " +
+            "order_date DATETIME, " +
+            "total_price REAL, " +
+            "FOREIGN KEY (" + COLUMN_EMAIL + ") REFERENCES User(" + COLUMN_EMAIL + ")\n" +
+            ");";
+
+    private static final String TABLE_CREATE_ORDER_ITEM =
+            "CREATE TABLE order_item (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "order_id INTEGER NOT NULL, " +
+            "pizza_id INTEGER NOT NULL, " +
+            "quantity INTEGER NOT NULL, " +
+            "FOREIGN KEY (order_id) REFERENCES orders(id), " +
+            "FOREIGN KEY (pizza_id) REFERENCES Pizza(id)\n" +
+            ");";
 
     private static final String TABLE_CREATE_USERS =
             "CREATE TABLE " + TABLE_USERS + " (" +
@@ -81,21 +101,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_USER_PHONE + " TEXT UNIQUE NOT NULL, " +
                     COLUMN_PROFILE_PICTURE + " BLOB, " +
                     COLUMN_USER_GENDER + " TEXT);";
-
-    private static final String TABLE_CREATE_ORDERS =
-            "CREATE TABLE " + TABLE_ORDERS + " (" +
-                    COLUMN_ORDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    COLUMN_EMAIL + " TEXT NOT NULL," +
-                    COLUMN_ORDER_DATE + " TEXT NOT NULL," +
-                    COLUMN_TOTAL_PRICE + " REAL NOT NULL," +
-                    COLUMN_PIZZA_ID + " INTEGER NOT NULL," +
-                    COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 1," +
-
-                    "FOREIGN KEY (" + COLUMN_EMAIL + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_EMAIL + ")," +
-                    "FOREIGN KEY (" + COLUMN_ORDER_ID + ") REFERENCES " + TABLE_ORDERS + "(" + COLUMN_ORDER_ID + ")," +
-                    "FOREIGN KEY (" + COLUMN_PIZZA_ID + ") REFERENCES " + TABLE_PIZZAS + "(" + COLUMN_PIZZA_ID + ")" +
-
-                    ");";
 
 
 
@@ -142,14 +147,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE_PIZZAS);
         db.execSQL(TABLE_CREATE_USERS);
-        db.execSQL(TABLE_CREATE_ORDERS);
         db.execSQL(TABLE_CREATE_FAVORITES);
         db.execSQL(TABLE_CREATE_SPECIAL_OFFERS);
         db.execSQL(TABLE_CREATE_ADMINS);
+        db.execSQL(TABLE_CREATE_ORDER);
+        db.execSQL(TABLE_CREATE_ORDER_ITEM);
     }
-
-
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -332,6 +335,99 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         return exists;
+    }
+
+
+    public void orderPizza(String email, int pizzaId, int quantity, double totalPrice) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        // add to the orders table
+        contentValues.put(COLUMN_EMAIL, email);
+        contentValues.put(COLUMN_ORDER_DATE, new Date(System.currentTimeMillis()).toString());
+        contentValues.put(COLUMN_TOTAL_PRICE, totalPrice);
+        db.insert(TABLE_ORDERS, null, contentValues);
+
+        // get the order id
+        Cursor cursor = db.rawQuery("SELECT MAX(id) FROM orders", null);
+        cursor.moveToFirst();
+        int orderId = cursor.getInt(0);
+        cursor.close();
+
+        // add to the order_item table
+        contentValues.clear();
+        contentValues.put("order_id", orderId);
+        contentValues.put("pizza_id", pizzaId);
+        contentValues.put("quantity", quantity);
+        db.insert("order_item", null, contentValues);
+
+        db.close();
+    }
+
+    public ArrayList<Order> getOrdersForUser(String userEmail) {
+        ArrayList<Order> orders = new ArrayList<>();
+
+        // Open the database
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define the query
+        String selectQuery = "SELECT * FROM " + TABLE_ORDERS +
+                " INNER JOIN " + "order_item" +
+                " ON " + TABLE_ORDERS + ".id = " + "order_item.order_id" +
+                " WHERE " + TABLE_ORDERS + "." + COLUMN_EMAIL + " = ?";
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{userEmail});
+
+        // Loop through the results and create Order objects
+        if (cursor.moveToFirst()) {
+            do {
+                int orderId = cursor.getInt(0);
+                String orderDate = cursor.getString(3);
+                double totalPrice = cursor.getDouble(4);
+
+                Order order = new Order(orderId, userEmail, orderDate, totalPrice);
+
+                // Get the pizzas for this order
+                Cursor pizzaCursor = db.rawQuery("SELECT * FROM " + "order_item" +
+                        " WHERE order_id = ?", new String[]{String.valueOf(orderId)});
+
+                while (pizzaCursor.moveToNext()) {
+                    int pizzaId = pizzaCursor.getInt(2);
+                    int quantity = pizzaCursor.getInt(3);
+
+                    // Get the pizza details
+                    Cursor pizzaDetailsCursor = db.rawQuery("SELECT * FROM " + TABLE_PIZZAS +
+                            " WHERE " + COLUMN_PIZZA_ID + " = ?", new String[]{String.valueOf(pizzaId)});
+
+                    if (pizzaDetailsCursor.moveToFirst()) {
+                        String pizzaName = pizzaDetailsCursor.getString(1);
+                        String pizzaDescription = pizzaDetailsCursor.getString(2);
+                        String pizzaCategory = pizzaDetailsCursor.getString(3);
+                        int pizzaPrice = pizzaDetailsCursor.getInt(4);
+                        String pizzaSize = pizzaDetailsCursor.getString(5);
+
+                        Pizza pizza = new Pizza(pizzaName, pizzaSize, pizzaPrice, pizzaDescription, pizzaCategory);
+                        pizza.setId(pizzaId);
+
+                        // Add the pizza to the order
+                        order.addPizza(pizza, quantity);
+                    }
+
+                    pizzaDetailsCursor.close();
+                }
+
+                pizzaCursor.close();
+
+                // Add the order to the list
+                orders.add(order);
+            } while (cursor.moveToNext());
+        }
+
+        // Close the cursor and the database
+        cursor.close();
+        db.close();
+
+        return orders;
     }
 
 }
