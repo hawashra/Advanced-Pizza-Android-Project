@@ -106,7 +106,7 @@ public class SpecialOffersFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String filterType = spinnerFilterType.getSelectedItem().toString();
-                PizzaMenuFragment.filterPizzaList(filterType, s.toString(), getContext());
+                //PizzaMenuFragment.filterPizzaList(filterType, s.toString(), getContext());
             }
 
 

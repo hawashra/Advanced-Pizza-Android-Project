@@ -15,6 +15,24 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".PotatoMenu"
+            android:exported="false" />
+        <activity
+            android:name=".DrinksMenu"
+            android:exported="false" />
+        <activity
+            android:name=".SaladMenu"
+            android:exported="false" />
+        <activity
+            android:name=".PizzaMenu"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryFragment"
+            android:exported="false" />
+        <activity
+            android:name=".MenuItem"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
