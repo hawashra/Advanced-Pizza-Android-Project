@@ -25,6 +25,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_SPECIAL_OFFERS = "SpecialOffer";
     public static final String TABLE_ADMINS = "Admin";
 
+    public static final String TABLE_SPECIAL_OFFER_PIZZAS = "SpecialOfferPizza";
+
+
     // Common column names
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_START_DATE = "start_date";
