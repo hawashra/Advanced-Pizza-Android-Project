@@ -53,6 +53,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
             Toast.makeText(v.getContext(),
                     "You clicked on " + pizza.getName(), Toast.LENGTH_SHORT).show();
 
+
         });
 
         holder.buttonFavorite.setOnClickListener(v -> {

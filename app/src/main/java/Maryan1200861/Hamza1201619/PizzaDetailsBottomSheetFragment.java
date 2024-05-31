@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,10 +24,28 @@ public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_pizza_details_bottom_sheet, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_pizza_details_bottom_sheet, container, false);
+
+        // Get the Pizza object from the arguments
+        Pizza pizza = null;
+        if (getArguments() != null) {
+            pizza = (Pizza) getArguments().getSerializable(ARG_PIZZA);
+        }
+
+        // Populate the views with the pizza details
+        if (pizza != null) {
+            TextView textViewPizzaName = view.findViewById(R.id.textViewPizzaName);
+            TextView textViewPizzaDescription = view.findViewById(R.id.textViewPizzaDescription);
+            TextView textViewPizzaPrice = view.findViewById(R.id.textViewPizzaPrice);
+
+            textViewPizzaName.setText(pizza.getName());
+            textViewPizzaDescription.setText(pizza.getDescription());
+            textViewPizzaPrice.setText(String.valueOf(pizza.getPrice()));
+        }
+
+        return view;
     }
 
     @Override
