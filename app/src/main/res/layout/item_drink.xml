@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/imageViewDrink"
+        android:layout_width="62dp"
+        android:layout_height="57dp"
+        android:contentDescription="Drink"
+        android:src="@drawable/drinkimages" />
+
+    <TextView
+        android:id="@+id/textViewDrinkName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@font/baloo"
+        android:paddingStart="16dp"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/buttonFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingTop="12dp"
+        android:paddingRight="12dp"
+        android:src="@drawable/fav_outline_icon" />
+
+    <Button
+        android:id="@+id/buttonOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order now" />
+
+</LinearLayout>

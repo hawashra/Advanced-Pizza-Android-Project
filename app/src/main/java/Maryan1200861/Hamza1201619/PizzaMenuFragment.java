@@ -3,14 +3,18 @@ package Maryan1200861.Hamza1201619;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.view.menu.MenuAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -31,7 +35,8 @@ import java.util.Objects;
 public class PizzaMenuFragment extends Fragment {
 
     private static RecyclerView recyclerView;
-
+    private Maryan1200861.Hamza1201619.MenuAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -74,54 +79,46 @@ public class PizzaMenuFragment extends Fragment {
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pizza_menu, container, false);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+
+        ArrayList<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(new MenuItem("Salad Menu", R.drawable.pizzas_image));
+        menuItems.add(new MenuItem("Noodles Category", R.drawable.salad_image));
+        menuItems.add(new MenuItem("Potato Menu", R.drawable.drinks_image));
+        menuItems.add(new MenuItem("Burger Menu", R.drawable.potato_image));
+
         recyclerView = view.findViewById(R.id.recyclerView);
-        // Set up your RecyclerView here (LayoutManager, Adapter, etc.)
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        adapter = new Maryan1200861.Hamza1201619.MenuAdapter(menuItems);
 
-        // Create a new DatabaseHelper and get the list of pizzas
-        try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
-            ArrayList<Pizza> pizzas = databaseHelper.getAllPizzas();
-
-            // Set up your RecyclerView
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new PizzaAdapter(pizzas));
-
-        } catch (Exception e) {
-            Log.d("db-error", Objects.requireNonNull(e.getMessage()));
-            Toast.makeText(getContext(), "An error occurred in retrieving pizzas from db",
-                    Toast.LENGTH_LONG).show();
-        }
-
-        EditText editTextSearch = view.findViewById(R.id.editTextSearch);
-        Spinner spinnerFilterType = view.findViewById(R.id.spinnerFilterType);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.filter_types, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFilterType.setAdapter(adapter);
-
-        editTextSearch.addTextChangedListener(new TextWatcher() {
+        adapter.setOnItemClickListener(new Maryan1200861.Hamza1201619.MenuAdapter.OnItemClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String filterType = spinnerFilterType.getSelectedItem().toString();
-                filterPizzaList(filterType, s.toString(), getContext());
+            public void onItemClick(int position) {
+                // Handle item click, navigate to corresponding menu
+                Fragment fragment = new CategoryFragment();
+                Bundle args = new Bundle();
+                args.putInt("category", position);
+                fragment.setArguments(args);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
-
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
 
         return view;
     }
 
-    public static void filterPizzaList(String filterType, String query, Context context) {
+    /*public static void filterPizzaList(String filterType, String query, Context context) {
         // Create a new DatabaseHelper and get the filtered list of pizzas
         try (DatabaseHelper databaseHelper = new DatabaseHelper(context)) {
             ArrayList<Pizza> filteredPizzas = databaseHelper.getPizzasWithFilter(filterType, query);
@@ -137,6 +134,6 @@ public class PizzaMenuFragment extends Fragment {
             Toast.makeText(context, "An error occurred in retrieving pizzas from db",
                     Toast.LENGTH_LONG).show();
         }
-    }
+    }*/
 
 }

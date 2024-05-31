@@ -32,6 +32,20 @@ public class MainActivity extends AppCompatActivity {
             connectionAsyncTask.execute("https://18fbea62d74a40eab49f72e12163fe6c.api.mockbin.io/");
 
 
+            /**** try to add these
+             *
+             * salads
+             * https://mocki.io/v1/13c6c44f-c0a8-4c96-9b0b-6504789bc72e
+             *
+             * drinks
+             * https://mocki.io/v1/cc37c64d-d9b7-4a4b-b6d3-9bfbca52f2f0
+             *
+             * fries
+             *https://mocki.io/v1/f834a8be-62ad-4a00-87c9-207ed5737460
+             *
+             */
+
+
             try(DatabaseHelper databaseHelper = new DatabaseHelper(this)) {
 
                 ArrayList<Pizza> allPizzas = databaseHelper.getAllPizzas();

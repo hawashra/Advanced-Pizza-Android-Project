@@ -12,5 +12,8 @@
         <item>Category</item>
     </string-array>
 
+    <string name="menu">Menu</string>
+    <string name="cart">Cart</string>
+
 </resources>
 
