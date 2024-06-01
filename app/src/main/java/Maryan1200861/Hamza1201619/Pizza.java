@@ -29,6 +29,12 @@ public class Pizza implements Serializable {
 
     }
 
+    public Pizza(int price, String description, String size) {
+        this.price = price;
+        this.description = description;
+        this.size = size;
+    }
+
 
     public String getCategory() {
         return category;
@@ -89,7 +95,15 @@ public class Pizza implements Serializable {
                 "\nName= " + name +
                 "\n}";
     }
-
+/*
+    public String toStringOrder() {
+        return "Pizza{" +
+                "price=" + price +
+                ", description='" + description + '\'' +
+                ", size='" + size + '\'' +
+                '}';
+    }
+*/
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
