@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.lang.ref.WeakReference;
 
@@ -39,6 +41,7 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
 
             if (result != null && !result.isEmpty()) {
                 List<PizzaFactory> pizzasFactories = PizzaJsonParser.getObjectFromJson(result);
+                List<SpecialOffer> specialOffers = SpecialOffersFactory.getSpecialOffers();
                 if (pizzasFactories != null && !pizzasFactories.isEmpty()) {
                     try (DatabaseHelper databaseHelper = new DatabaseHelper(activity)) {
                         for (PizzaFactory pizzaFactory : pizzasFactories) {
@@ -48,8 +51,20 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
                                 databaseHelper.insertPizza(pizzaFactory.createPizzaSmall());
                                 databaseHelper.insertPizza(pizzaFactory.createPizzaMedium());
                                 databaseHelper.insertPizza(pizzaFactory.createPizzaLarge());
+
+                                // add normal pizzas to special offers factory list to be used in special offers
+                                SpecialOffersFactory.addNormalPizzaToList(pizzaFactory.createPizzaSmall());
+                                SpecialOffersFactory.addNormalPizzaToList(pizzaFactory.createPizzaMedium());
+                                SpecialOffersFactory.addNormalPizzaToList(pizzaFactory.createPizzaLarge());
                             }
                         }
+
+                        for (SpecialOffer specialOffer : specialOffers) {
+                            if (!databaseHelper.isSpecialOfferInDatabase(specialOffer.getOfferId())) {
+                                databaseHelper.insertSpecialOffer(specialOffer);
+                            }
+                        }
+
                     } catch (Exception e) {
                         Toast.makeText(activity, "Failed to save data. Please try again.", Toast.LENGTH_LONG).show();
 

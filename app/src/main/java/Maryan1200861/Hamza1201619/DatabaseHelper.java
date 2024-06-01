@@ -116,14 +116,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_CREATE_SPECIAL_OFFERS =
             "CREATE TABLE " + TABLE_SPECIAL_OFFERS + " (" +
                     COLUMN_OFFER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    COLUMN_PIZZA_ID + " INTEGER NOT NULL," +
                     COLUMN_DESCRIPTION + " TEXT," +
                     COLUMN_START_DATE + " TEXT NOT NULL," +
                     COLUMN_END_DATE + " TEXT NOT NULL," +
-                    COLUMN_PRICE + " REAL NOT NULL," +
-                    "FOREIGN KEY (" + COLUMN_OFFER_ID + ") REFERENCES " + TABLE_SPECIAL_OFFERS + "(" + COLUMN_OFFER_ID + ")," +
-                    "FOREIGN KEY (" + COLUMN_PIZZA_ID + ") REFERENCES " + TABLE_PIZZAS + "(" + COLUMN_PIZZA_ID + ")" +
+                    COLUMN_PRICE + " INTEGER NOT NULL" +
+                    ");";
 
+    private static final String TABLE_CREATE_SPECIAL_OFFER_ITEM =
+            "CREATE TABLE SpecialOfferItem (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "offer_id INTEGER NOT NULL, " +
+                    "pizza_id INTEGER NOT NULL, " +
+                    "FOREIGN KEY (offer_id) REFERENCES SpecialOffer(offer_id), " +
+                    "FOREIGN KEY (pizza_id) REFERENCES Pizza(id)" +
                     ");";
 
     private static final String TABLE_CREATE_ADMINS =
@@ -152,6 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_CREATE_ADMINS);
         db.execSQL(TABLE_CREATE_ORDER);
         db.execSQL(TABLE_CREATE_ORDER_ITEM);
+        db.execSQL(TABLE_CREATE_SPECIAL_OFFER_ITEM);
     }
 
     @Override
@@ -428,6 +434,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return orders;
+    }
+
+    public boolean isSpecialOfferInDatabase(int offerId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_SPECIAL_OFFERS + " WHERE " + COLUMN_OFFER_ID + " = ?", new String[]{String.valueOf(offerId)});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        db.close();
+        return exists;
+    }
+
+    public void insertSpecialOffer(SpecialOffer specialOffer) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_OFFER_ID, specialOffer.getOfferId());
+        contentValues.put(COLUMN_DESCRIPTION, specialOffer.getDescription());
+        contentValues.put(COLUMN_START_DATE, specialOffer.getStartDate());
+        contentValues.put(COLUMN_END_DATE, specialOffer.getEndDate());
+        contentValues.put(COLUMN_PRICE, specialOffer.getPrice());
+        db.insert(TABLE_SPECIAL_OFFERS, null, contentValues);
     }
 
 }

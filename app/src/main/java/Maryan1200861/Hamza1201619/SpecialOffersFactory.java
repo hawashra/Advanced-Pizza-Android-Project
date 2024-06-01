@@ -1,71 +1,50 @@
 package Maryan1200861.Hamza1201619;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-class SpecialOffersFactory {
-    private List<Pizza> pizzaList;
-    private Random random;
+public class SpecialOffersFactory {
 
-    public SpecialOffersFactory() {
-        pizzaList = new ArrayList<>();
-        random = new Random();
+    public static List<Pizza> normalPizzas;
+
+    public static List<SpecialOffer> getSpecialOffers() {
+        List<SpecialOffer> specialOffers = new ArrayList<>();
+
+        // add some special offers of two pizzas
+        SpecialOffer offer1 = new SpecialOffer(1, "Weekend Delight", "2024-06-01", "2024-06-30", 30);
+        offer1.addPizza(normalPizzas.get(0));
+        offer1.addPizza(normalPizzas.get(4));
+
+        SpecialOffer offer2 = new SpecialOffer(2, "Summer Combo", "2024-06-01", "2024-06-30", 25);
+        offer2.addPizza(normalPizzas.get(1));
+        offer2.addPizza(normalPizzas.get(3));
+
+        SpecialOffer offer3 = new SpecialOffer(3, "Family Feast", "2024-06-01", "2024-06-30", 25);
+        offer3.addPizza(normalPizzas.get(2));
+        offer3.addPizza(normalPizzas.get(5));
+
+        SpecialOffer offer4 = new SpecialOffer(4, "Truffle Treat", "2024-06-01", "2024-06-30", 28);
+        offer4.addPizza(normalPizzas.get(6));
+        offer4.addPizza(normalPizzas.get(9));
+
+        SpecialOffer offer5 = new SpecialOffer(5, "Veggie Delight", "2024-06-01", "2024-06-30", 25);
+        offer5.addPizza(normalPizzas.get(7));
+        offer5.addPizza(normalPizzas.get(8));
+
+        specialOffers.add(offer1);
+        specialOffers.add(offer2);
+        specialOffers.add(offer3);
+        specialOffers.add(offer4);
+        specialOffers.add(offer5);
+
+        return specialOffers;
     }
 
-    public void addPizza(Pizza pizza) {
-        pizzaList.add(pizza);
+    public static void addNormalPizzaToList(Pizza pizza) {
+        normalPizzas.add(pizza);
     }
 
-    public Pizza getRandomPizzaWithOffer() {
-        Pizza pizza;
-        if (pizzaList.isEmpty()) {
-            pizza = createRandomPizza();
-        } else {
-            int index = random.nextInt(pizzaList.size());
-            pizza = pizzaList.get(index);
-        }
-        double offerPrice = calculateOfferPrice(pizza.getPrice());
-        return new PizzaWithOffer(pizza, offerPrice);
-    }
-
-    private Pizza createRandomPizza() {
-        int price = (int) (10 + (20 - 10) * random.nextDouble());
-        String[] descriptions = {"Margherita", "Pepperoni", "Hawaiian", "Veggie"};
-        String description = descriptions[random.nextInt(descriptions.length)];
-        String[] sizes = {"Small", "Medium", "Large"};
-        String size = sizes[random.nextInt(sizes.length)];
-        return new Pizza(price, description, size);
-    }
-
-    private double calculateOfferPrice(double price) {
-        return price - (price * (5 + (15 - 5) * random.nextDouble()) / 100);
-    }
-
-    private class PizzaWithOffer extends Pizza {
-        private double offerPrice;
-
-        public PizzaWithOffer(Pizza pizza, double offerPrice) {
-            super(pizza.getPrice(), pizza.getDescription(), pizza.getSize());
-            this.offerPrice = offerPrice;
-        }
-
-        public double getOfferPrice() {
-            return offerPrice;
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + ", offerPrice=" + offerPrice;
-        }
-    }
-
-    public static void main(String[] args) {
-        SpecialOffersFactory factory = new SpecialOffersFactory();
-        factory.addPizza(new Pizza(13, "Cheese Pizza", "Medium"));
-        factory.addPizza(new Pizza(16, "BBQ Chicken Pizza", "Large"));
-
-        Pizza randomPizzaWithOffer = factory.getRandomPizzaWithOffer();
-        System.out.println(randomPizzaWithOffer);
-    }
 }

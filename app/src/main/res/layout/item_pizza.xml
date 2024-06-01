@@ -1,9 +1,19 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/pizzaCardView"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+app:cardCornerRadius="8dp"
+android:layout_margin="8dp"
+app:cardElevation="8dp">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/fresh_olive">
 
     <ImageView
         android:id="@+id/imageViewPizza"
@@ -19,7 +29,9 @@
         android:layout_weight="1"
         android:fontFamily="@font/baloo"
         android:paddingStart="16dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        />
 
     <ImageView
         android:id="@+id/buttonFavorite"
@@ -28,7 +40,8 @@
         android:layout_gravity="end"
         android:paddingTop="12dp"
         android:paddingRight="12dp"
-        android:src="@drawable/fav_outline_icon" />
+        android:src="@drawable/fav_outline_icon"
+        />
 
     <Button
         android:id="@+id/buttonOrder"
@@ -37,3 +50,5 @@
         android:text="Order now" />
 
 </LinearLayout>
+
+</androidx.cardview.widget.CardView>
