@@ -382,8 +382,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 int orderId = cursor.getInt(0);
-                String orderDate = cursor.getString(3);
-                double totalPrice = cursor.getDouble(4);
+                String orderDate = cursor.getString(2);
+                double totalPrice = cursor.getDouble(3);
 
                 Order order = new Order(orderId, userEmail, orderDate, totalPrice);
 

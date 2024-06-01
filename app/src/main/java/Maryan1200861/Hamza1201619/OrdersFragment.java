@@ -78,6 +78,8 @@ public class OrdersFragment extends Fragment {
             ordersRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
             ordersRecyclerView.setAdapter(ordersAdapter);
 
+
+
         } catch (Exception e) {
             Log.d("orders_error_db", Objects.requireNonNull(e.getMessage()));
         }
