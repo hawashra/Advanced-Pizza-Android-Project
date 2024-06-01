@@ -4,12 +4,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewPizzaName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/imageViewPizza"
@@ -18,26 +12,42 @@
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/textViewPizzaDescription"
+        android:id="@+id/textViewPizzaName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
+        android:text="pizza name"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/red"
+        android:paddingTop="8dp"/>
 
     <TextView
         android:id="@+id/textViewPizzaPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="$0.00"
+        android:textSize="18dp"
+        android:paddingTop="8dp"
+        android:textStyle="bold"
+        android:textColor="@color/grey"/>
+
+    <TextView
+        android:id="@+id/textViewPizzaDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="pizza description"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
+
 
     <Button
         android:id="@+id/buttonOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Order"
+        android:background="#4CAF50"
+        android:textColor="#FFFFFF"
         android:layout_marginTop="16dp" />
-
-
-
 
 </LinearLayout>
