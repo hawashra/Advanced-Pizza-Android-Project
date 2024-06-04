@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -274,24 +275,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    public ArrayList<String> getFavoritePizzas(String userEmail) {
-        ArrayList<String> pizzasNames = new ArrayList<>();
+    public void addFavorite(Pizza pizza, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_PIZZA_ID, pizza.getId());
+        contentValues.put(COLUMN_EMAIL, email);
+        db.insert(TABLE_FAVORITES, null, contentValues);
+        db.close();
+    }
+
+    public boolean removeFavorite(Pizza pizza, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deleted = db.delete(TABLE_FAVORITES, COLUMN_PIZZA_ID + " = ? AND " + COLUMN_EMAIL + " = ?", new String[]{String.valueOf(pizza.getId()), email});
+        db.close();
+        return deleted > 0;
+    }
+
+    public ArrayList<Pizza> getFavoritePizzas(String email) {
+        ArrayList<Pizza> favoritePizzas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_PIZZAS +
-                " INNER JOIN " + TABLE_FAVORITES +
-                " ON " + TABLE_PIZZAS + "." + COLUMN_PIZZA_ID + " = " + TABLE_FAVORITES + "." + COLUMN_PIZZA_ID +
-                " WHERE " + TABLE_FAVORITES + "." + COLUMN_EMAIL + " = ? AND " + TABLE_PIZZAS + "." + COLUMN_PIZZA_NAME;
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_FAVORITES + " WHERE email = ?", new String[]{email});
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(2);
+                Cursor pizzaCursor = db.rawQuery("SELECT * FROM " + TABLE_PIZZAS + " WHERE " + COLUMN_PIZZA_ID + " = ?", new String[]{String.valueOf(id)});
+                if (pizzaCursor.moveToFirst()) {
+                    String name = pizzaCursor.getString(1);
+                    String description = pizzaCursor.getString(2);
+                    String category = pizzaCursor.getString(3);
+                    int price = pizzaCursor.getInt(4);
+                    String size = pizzaCursor.getString(5);
+                    Pizza pizza = new Pizza(name, size, price, description, category);
+                    pizza.setId(id);
+                    favoritePizzas.add(pizza);
+                }
 
-        Cursor cursor = db.rawQuery(query, new String[]{userEmail});
-
-        while (cursor.moveToNext()) {
-            String name = cursor.getString(1);
-            pizzasNames.add(name);
+            } while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
-
-        return pizzasNames;
+        return favoritePizzas;
     }
 
 
@@ -456,4 +478,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_SPECIAL_OFFERS, null, contentValues);
     }
 
+    public boolean isFavorite(Pizza pizza, String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_FAVORITES + " WHERE " + COLUMN_PIZZA_ID + " = ? AND " + COLUMN_EMAIL + " = ?", new String[]{String.valueOf(pizza.getId()), email});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        db.close();
+        return exists;
+    }
 }

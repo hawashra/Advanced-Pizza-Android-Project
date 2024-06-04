@@ -1,13 +1,17 @@
 package Maryan1200861.Hamza1201619;
 
 import java.util.ArrayList;
+import android.content.Context;
 
 public class UserManager {
     private static UserManager instance;
     private User currentUser;
-    private static ArrayList<String> favoritePizzas;
+    private static ArrayList<Pizza> favoritePizzas;
+    private static Context context;
 
-    private UserManager() {}
+    private UserManager() {
+
+    }
 
     public static UserManager getInstance() {
         if (instance == null) {
@@ -25,29 +29,33 @@ public class UserManager {
         this.currentUser = currentUser;
     }
 
-    private void addFavoritePizza(String pizzaName) {
-        favoritePizzas.add(pizzaName);
+    private void addFavoritePizza(Pizza pizza) {
+        favoritePizzas.add(pizza);
     }
 
-    private void removeFavoritePizza(String pizzaName) {
+    private void removeFavoritePizza(Pizza pizzaName) {
         favoritePizzas.remove(pizzaName);
     }
 
-    public void setFavoritePizzas(ArrayList<String> favoritePizzas) {
+    public void setFavoritePizzas(ArrayList<Pizza> favoritePizzas) {
         UserManager.favoritePizzas = favoritePizzas;
     }
 
-    public boolean toggleFavorite(String pizzaName) {
-        if (favoritePizzas.contains(pizzaName)) {
-            removeFavoritePizza(pizzaName);
+    public boolean toggleFavorite(Pizza pizza) {
+        if (favoritePizzas.contains(pizza)) {
+            removeFavoritePizza(pizza);
             return false;
         } else {
-            addFavoritePizza(pizzaName);
+            addFavoritePizza(pizza);
             return true;
         }
     }
 
     public void clearCurrentUser() {
         this.currentUser = null;
+    }
+
+    public ArrayList<Pizza> getFavoritePizzas() {
+        return favoritePizzas;
     }
 }

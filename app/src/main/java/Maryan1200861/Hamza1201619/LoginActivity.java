@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             User user = databaseHelper.getUserByEmail(email);
             UserManager.getInstance().setCurrentUser(user);
         } catch (Exception e) {
-            Log.d("db-error", Objects.requireNonNull(e.getMessage()));
+            Log.d("db-error", Arrays.toString(Objects.requireNonNull(e.getStackTrace())));
             Toast.makeText(this, "An error occurred in retrieving user from db",
                     Toast.LENGTH_LONG).show();
         }

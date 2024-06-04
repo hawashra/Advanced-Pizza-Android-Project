@@ -1,5 +1,6 @@
 package Maryan1200861.Hamza1201619;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,12 +60,27 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         holder.buttonFavorite.setOnClickListener(v -> {
             // Handle favorite button click here
 
+
             // Toggle the favorite status of the pizza
-            boolean isFavorite = UserManager.getInstance().toggleFavorite(pizza.getName());
+            boolean isFavorite = UserManager.getInstance().toggleFavorite(pizza);
 
             // Set the favorite icon based on the new status
             holder.buttonFavorite.setImageResource(isFavorite ? R.drawable.fav_filled_icon :
                     R.drawable.fav_outline_icon);
+
+            try (DatabaseHelper databaseHelper = new DatabaseHelper(v.getContext())) {
+
+                if (!databaseHelper.isFavorite(pizza, UserManager.getInstance().getCurrentUser().getEmail())) {
+                    databaseHelper.addFavorite(pizza, UserManager.getInstance().getCurrentUser().getEmail());
+                    Toast.makeText(v.getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+                } else {
+                    databaseHelper.removeFavorite(pizza, UserManager.getInstance().getCurrentUser().getEmail());
+                    Toast.makeText(v.getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (Exception e) {
+                Log.e("PizzaAdapter", "Error adding/removing favorite", e);
+            }
 
         });
 

@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,7 +12,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class PizzasAdapter extends RecyclerView.Adapter<PizzasAdapter.PizzaViewHolder> {
+
+    // FIXME: might not be static
     private ArrayList<Map.Entry<Pizza, Integer>> pizzas;
+
 
     public PizzasAdapter(ArrayList<Map.Entry<Pizza, Integer>> pizzas) {
         this.pizzas = pizzas;
@@ -45,6 +49,8 @@ public class PizzasAdapter extends RecyclerView.Adapter<PizzasAdapter.PizzaViewH
 
             pizzaNameTextView = itemView.findViewById(R.id.pizzaNameTextView);
             pizzaQuantityTextView = itemView.findViewById(R.id.pizzaQuantityTextView);
+
+
         }
     }
 }

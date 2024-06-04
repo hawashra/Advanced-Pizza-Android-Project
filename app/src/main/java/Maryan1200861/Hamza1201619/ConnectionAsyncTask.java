@@ -41,7 +41,6 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
 
             if (result != null && !result.isEmpty()) {
                 List<PizzaFactory> pizzasFactories = PizzaJsonParser.getObjectFromJson(result);
-                List<SpecialOffer> specialOffers = SpecialOffersFactory.getSpecialOffers();
                 if (pizzasFactories != null && !pizzasFactories.isEmpty()) {
                     try (DatabaseHelper databaseHelper = new DatabaseHelper(activity)) {
                         for (PizzaFactory pizzaFactory : pizzasFactories) {
@@ -58,12 +57,15 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
                                 SpecialOffersFactory.addNormalPizzaToList(pizzaFactory.createPizzaLarge());
                             }
                         }
-
+                        /*
+                        List<SpecialOffer> specialOffers = SpecialOffersFactory.getSpecialOffers();
                         for (SpecialOffer specialOffer : specialOffers) {
                             if (!databaseHelper.isSpecialOfferInDatabase(specialOffer.getOfferId())) {
                                 databaseHelper.insertSpecialOffer(specialOffer);
                             }
                         }
+
+                        */
 
                     } catch (Exception e) {
                         Toast.makeText(activity, "Failed to save data. Please try again.", Toast.LENGTH_LONG).show();

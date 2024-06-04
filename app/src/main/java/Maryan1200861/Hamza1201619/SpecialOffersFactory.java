@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class SpecialOffersFactory {
 
-    public static List<Pizza> normalPizzas;
+    public static List<Pizza> normalPizzas = null;
 
     public static List<SpecialOffer> getSpecialOffers() {
         List<SpecialOffer> specialOffers = new ArrayList<>();
@@ -44,6 +44,11 @@ public class SpecialOffersFactory {
     }
 
     public static void addNormalPizzaToList(Pizza pizza) {
+
+        if (normalPizzas == null) {
+            normalPizzas = new ArrayList<>();
+        }
+
         normalPizzas.add(pizza);
     }
 
