@@ -19,7 +19,6 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
 
     // Add your list of pizzas here
 
-    //FIXME: may not be final if the admin can add pizzas
     private final ArrayList<Pizza> pizzas;
 
     public PizzaAdapter(ArrayList<Pizza> pizzas) {
@@ -41,6 +40,10 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         holder.textViewPizzaName.setText(pizza.getName());
         holder.imageViewPizza.setImageResource(R.drawable.pizza_image);
 
+        boolean isFavorite = UserManager.getInstance().isFavoritePizza(pizza);
+
+        holder.buttonFavorite.setImageResource(isFavorite ? R.drawable.fav_filled_icon : R.drawable.fav_outline_icon);
+
         // Bind your pizza data to the views here
         holder.buttonOrder.setOnClickListener(v -> {
             // Handle button click here
@@ -60,12 +63,12 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         holder.buttonFavorite.setOnClickListener(v -> {
             // Handle favorite button click here
 
+            boolean favorite = UserManager.getInstance().toggleFavorite(pizza);
 
             // Toggle the favorite status of the pizza
-            boolean isFavorite = UserManager.getInstance().toggleFavorite(pizza);
 
             // Set the favorite icon based on the new status
-            holder.buttonFavorite.setImageResource(isFavorite ? R.drawable.fav_filled_icon :
+            holder.buttonFavorite.setImageResource(favorite ? R.drawable.fav_filled_icon :
                     R.drawable.fav_outline_icon);
 
             try (DatabaseHelper databaseHelper = new DatabaseHelper(v.getContext())) {
@@ -73,6 +76,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
                 if (!databaseHelper.isFavorite(pizza, UserManager.getInstance().getCurrentUser().getEmail())) {
                     databaseHelper.addFavorite(pizza, UserManager.getInstance().getCurrentUser().getEmail());
                     Toast.makeText(v.getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+
                 } else {
                     databaseHelper.removeFavorite(pizza, UserManager.getInstance().getCurrentUser().getEmail());
                     Toast.makeText(v.getContext(), "Removed from favorites", Toast.LENGTH_SHORT).show();

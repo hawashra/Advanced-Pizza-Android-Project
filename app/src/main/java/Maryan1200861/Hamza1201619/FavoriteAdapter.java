@@ -38,6 +38,16 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         Pizza favorite = favorites.get(position);
         holder.textViewPizzaName.setText(favorite.getName());
         holder.imageViewPizza.setImageResource(R.drawable.pizza_image);
+
+        holder.buttonFavorite.setImageResource(R.drawable.fav_filled_icon);
+
+
+        holder.buttonFavorite.setOnClickListener(v -> {
+            UserManager.getInstance().toggleFavorite(favorite);
+            favoriteFragment.refreshFavorites();
+            Toast.makeText(v.getContext(), "Removed " + favorite.getName() + " from favorites", Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     @Override
@@ -61,8 +71,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
             buttonFavorite = itemView.findViewById(R.id.buttonFavorite);
 
         }
-
-
 
     }
     public void updateData(ArrayList<Pizza> favorites) {

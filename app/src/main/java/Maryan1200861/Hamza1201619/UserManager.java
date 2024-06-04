@@ -58,4 +58,8 @@ public class UserManager {
     public ArrayList<Pizza> getFavoritePizzas() {
         return favoritePizzas;
     }
+
+    public boolean isFavoritePizza(Pizza pizza) {
+        return favoritePizzas.contains(pizza);
+    }
 }
