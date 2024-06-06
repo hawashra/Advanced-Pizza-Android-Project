@@ -49,7 +49,6 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
 
         public OrderViewHolder(View itemView) {
             super(itemView);
-
             orderIdTextView = itemView.findViewById(R.id.orderIdTextView);
             orderDateTextView = itemView.findViewById(R.id.orderDateTextView);
             totalPriceTextView = itemView.findViewById(R.id.totalPriceTextView);

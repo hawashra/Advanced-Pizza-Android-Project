@@ -48,7 +48,7 @@
 
         <!-- Password Field -->
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/editTextNewPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"

@@ -6,7 +6,10 @@ import android.widget.Toast;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
+
 public final class HashPassword {
+    public static String SHA256_EMPTY = "E3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
     public static String hashPassword(String password, Context context) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

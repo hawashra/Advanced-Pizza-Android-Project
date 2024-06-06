@@ -6,9 +6,13 @@ import android.database.AbstractCursor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -172,8 +176,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(COLUMN_USER_FIRSTNAME, user.getFirstname());
-        contentValues.put(COLUMN_USER_LASTNAME, user.getLastname());
+        contentValues.put(COLUMN_USER_FIRSTNAME, user.getFirstName());
+        contentValues.put(COLUMN_USER_LASTNAME, user.getLastName());
         contentValues.put(COLUMN_USER_EMAIL, user.getEmail());
         contentValues.put(COLUMN_USER_HASHED_PASSWORD, user.getHashedPassword());
         contentValues.put(COLUMN_USER_PHONE, user.getPhone());
@@ -485,5 +489,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return exists;
+    }
+
+    public void updateUserInformation(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_USER_FIRSTNAME, user.getFirstName());
+        contentValues.put(COLUMN_USER_LASTNAME, user.getLastName());
+        contentValues.put(COLUMN_USER_PHONE, user.getPhone());
+        contentValues.put(COLUMN_USER_HASHED_PASSWORD, user.getHashedPassword());
+        db.update(TABLE_USERS, contentValues, COLUMN_USER_EMAIL + " = ?", new String[]{user.getEmail()});
+        db.close();
+    }
+
+    public Bitmap getUserProfilePicture(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_PROFILE_PICTURE + " FROM " + TABLE_USERS + " WHERE " + COLUMN_USER_EMAIL + " = ?", new String[]{email});
+        Bitmap profilePicture = null;
+        if (cursor.moveToFirst()) {
+            byte[] image = cursor.getBlob(0);
+            profilePicture = BitmapFactory.decodeByteArray(image, 0, image.length);
+        }
+        cursor.close();
+        db.close();
+        return profilePicture;
+    }
+
+    public void updateUserProfilePicture(String email, Bitmap profilePicture) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_PROFILE_PICTURE, getBitmapAsByteArray(profilePicture));
+        db.update(TABLE_USERS, contentValues, COLUMN_USER_EMAIL + " = ?", new String[]{email});
+        db.close();
+    }
+
+    private byte[] getBitmapAsByteArray(Bitmap profilePicture) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        profilePicture.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        return outputStream.toByteArray();
     }
 }

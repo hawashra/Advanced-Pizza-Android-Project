@@ -1,5 +1,7 @@
 package Maryan1200861.Hamza1201619;
 
+import android.app.Dialog;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Objects;
@@ -97,6 +100,18 @@ public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
             }
         });
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            View bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            behavior.setPeekHeight((int) (Resources.getSystem().getDisplayMetrics().heightPixels * 0.8));
+        }
     }
 
 

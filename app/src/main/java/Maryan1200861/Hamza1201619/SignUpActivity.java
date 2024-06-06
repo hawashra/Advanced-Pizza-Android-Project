@@ -20,6 +20,11 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPhone, editTextFirstName, editTextLastName, editTextPassword, editTextConfirmPassword;
     private Spinner spinnerGender;
 
+    public static String emailRegex = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}";
+    public static String phoneRegex = "05\\d{8}";
+
+    public static String passwordRegex = "((?=.*\\d)(?=.*[a-zA-Z]).{8,})";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +34,7 @@ public class SignUpActivity extends AppCompatActivity {
         editTextPhone = findViewById(R.id.editTextPhone);
         editTextFirstName = findViewById(R.id.editTextFirstName);
         editTextLastName = findViewById(R.id.editTextLastName);
-        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextPassword = findViewById(R.id.editTextNewPassword);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         spinnerGender = findViewById(R.id.spinnerGender);
         Button buttonCreateAccount = findViewById(R.id.buttonCreateAccount);
@@ -52,8 +57,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                     User user1 = new User();
                     user1.setEmail(editTextEmail.getText().toString());
-                    user1.setFirstname(editTextFirstName.getText().toString());
-                    user1.setLastname(editTextLastName.getText().toString());
+                    user1.setFirstName(editTextFirstName.getText().toString());
+                    user1.setLastName(editTextLastName.getText().toString());
                     user1.setPhone(editTextPhone.getText().toString());
                     user1.setGender(spinnerGender.getSelectedItem().toString());
                     user1.setHashedPassword(hashedPassword);
@@ -81,12 +86,13 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validateInputs() {
-        if (!Pattern.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}", editTextEmail.getText().toString().trim())) {
+    public boolean validateInputs() {
+
+        if (!Pattern.matches(emailRegex, editTextEmail.getText().toString().trim())) {
             showToast("Invalid email format.");
             return false;
         }
-        if (!Pattern.matches("05\\d{8}", editTextPhone.getText().toString().trim())) {
+        if (!Pattern.matches(phoneRegex, editTextPhone.getText().toString().trim())) {
             showToast("Phone number must start with '05' and be 10 digits long.");
             return false;
         }
@@ -98,7 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
             showToast("Last name must be at least 3 characters long.");
             return false;
         }
-        if (!Pattern.matches("((?=.*\\d)(?=.*[a-zA-Z]).{8,})", editTextPassword.getText().toString())) {
+        if (!Pattern.matches(passwordRegex, editTextPassword.getText().toString())) {
             showToast("Password must be at least 8 characters long and include at least one letter and one number.");
             return false;
         }

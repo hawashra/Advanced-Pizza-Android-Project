@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         prefsManager = SharedPreferencesManager.getInstance(this);
 
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextPassword = findViewById(R.id.editTextNewPassword);
         checkBoxRememberMe = findViewById(R.id.checkBoxRememberMe);
 
         if (getIntent().getBooleanExtra("clearPassword", false)) {
