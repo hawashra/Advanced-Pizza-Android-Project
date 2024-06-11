@@ -160,15 +160,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_CREATE_FAVORITES);
         db.execSQL(TABLE_CREATE_SPECIAL_OFFERS);
         db.execSQL(TABLE_CREATE_ADMINS);
+        insertStaticAdmin(db);
         db.execSQL(TABLE_CREATE_ORDER);
         db.execSQL(TABLE_CREATE_ORDER_ITEM);
         db.execSQL(TABLE_CREATE_SPECIAL_OFFER_ITEM);
     }
 
+    private void insertStaticAdmin(SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_EMAIL, "maryan@gmail.com");
+        values.put(COLUMN_PASSWORD, "123456MM"); // Ideally, hash this password
+        values.put(COLUMN_FIRST_NAME, "maryan");
+        values.put(COLUMN_LAST_NAME, "Kassis");
+        values.put(COLUMN_PHONE_NUMBER, "0555555555");
+        // For profile picture, you can use a placeholder or skip this field initially
+        db.insert(TABLE_ADMINS, null, values);
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ADMINS);
+        onCreate(db);
     }
 
     public void registerNewUser(User user) {
@@ -528,4 +539,120 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         profilePicture.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         return outputStream.toByteArray();
     }
+    public void updateAdminInformation(Admin admin) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_FIRST_NAME, admin.getFirstName());
+        contentValues.put(COLUMN_LAST_NAME, admin.getLastName());
+        contentValues.put(COLUMN_PASSWORD, admin.getHashedPassword()); // Ensure the password is hashed
+        contentValues.put(COLUMN_PHONE_NUMBER, admin.getPhoneNumber());
+        db.update(TABLE_ADMINS, contentValues, COLUMN_EMAIL + " = ?", new String[]{admin.getEmail()});
+        db.close();
+    }
+
+    public Admin getAdminByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ADMINS + " WHERE " + COLUMN_EMAIL + " = ?", new String[]{email});
+        Admin admin = null;
+        if (cursor.moveToFirst()) {
+            String hashedPassword = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD));
+            String firstName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FIRST_NAME));
+            String lastName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LAST_NAME));
+            String phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PHONE_NUMBER));
+            admin = new Admin(email, hashedPassword, firstName, lastName, phoneNumber);
+        }
+        cursor.close();
+        db.close();
+        return admin;
+    }
+
+    public Bitmap getAdminProfilePicture(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_PROFILE_PICTURE + " FROM " + TABLE_ADMINS + " WHERE " + COLUMN_EMAIL + " = ?", new String[]{email});
+        Bitmap profilePicture = null;
+        if (cursor.moveToFirst()) {
+            byte[] image = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_PROFILE_PICTURE));
+            profilePicture = BitmapFactory.decodeByteArray(image, 0, image.length);
+        }
+        cursor.close();
+        db.close();
+        return profilePicture;
+    }
+
+    public void updateAdminProfilePicture(String email, Bitmap profilePicture) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_PROFILE_PICTURE, getBitmapAsByteArray(profilePicture));
+        db.update(TABLE_ADMINS, contentValues, COLUMN_EMAIL + " = ?", new String[]{email});
+        db.close();
+    }
+
+    public ArrayList<Order> getAllOrders() {
+        ArrayList<Order> orders = new ArrayList<>();
+
+        // Open the database
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define the query to get all orders
+        String selectQuery = "SELECT * FROM " + TABLE_ORDERS +
+                " INNER JOIN " + "order_item" +
+                " ON " + TABLE_ORDERS + ".id = " + "order_item.order_id";
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // Loop through the results and create Order objects
+        if (cursor.moveToFirst()) {
+            do {
+                int orderId = cursor.getInt(0);
+                String email = cursor.getString(1);
+                String orderDate = cursor.getString(2);
+                double totalPrice = cursor.getDouble(3);
+
+                Order order = new Order(orderId, email, orderDate, totalPrice);
+
+                // Get the pizzas for this order
+                Cursor pizzaCursor = db.rawQuery("SELECT * FROM " + "order_item" +
+                        " WHERE order_id = ?", new String[]{String.valueOf(orderId)});
+
+                while (pizzaCursor.moveToNext()) {
+                    int pizzaId = pizzaCursor.getInt(2);
+                    int quantity = pizzaCursor.getInt(3);
+
+                    // Get the pizza details
+                    Cursor pizzaDetailsCursor = db.rawQuery("SELECT * FROM " + TABLE_PIZZAS +
+                            " WHERE " + COLUMN_PIZZA_ID + " = ?", new String[]{String.valueOf(pizzaId)});
+
+                    if (pizzaDetailsCursor.moveToFirst()) {
+                        String pizzaName = pizzaDetailsCursor.getString(1);
+                        String pizzaDescription = pizzaDetailsCursor.getString(2);
+                        String pizzaCategory = pizzaDetailsCursor.getString(3);
+                        int pizzaPrice = pizzaDetailsCursor.getInt(4);
+                        String pizzaSize = pizzaDetailsCursor.getString(5);
+
+                        Pizza pizza = new Pizza(pizzaName, pizzaSize, pizzaPrice, pizzaDescription, pizzaCategory);
+                        pizza.setId(pizzaId);
+
+                        // Add the pizza to the order
+                        order.addPizza(pizza, quantity);
+                    }
+
+                    pizzaDetailsCursor.close();
+                }
+
+                pizzaCursor.close();
+
+                // Add the order to the list
+                orders.add(order);
+            } while (cursor.moveToNext());
+        }
+
+        // Close the cursor and the database
+        cursor.close();
+        db.close();
+
+        return orders;
+    }
+
 }
+
