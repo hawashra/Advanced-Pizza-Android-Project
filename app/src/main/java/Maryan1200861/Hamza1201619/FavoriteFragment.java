@@ -33,9 +33,14 @@ public class FavoriteFragment extends Fragment {
         return view;
     }
 
-    public void refreshFavorites() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
-        List<Pizza> favorites = UserManager.getInstance().getFavoritePizzas();
-        favoriteAdapter.updateData((ArrayList<Pizza>) favorites);
+    public void removeFavorite(Pizza pizza) {
+        favoriteAdapter.removePizza(pizza);
+        // remove the pizza from the database
+        try {
+            DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+            databaseHelper.removeFavorite(pizza, UserManager.getInstance().getCurrentUser().getEmail());
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error removing favorite", Toast.LENGTH_SHORT).show();
+        }
     }
 }
