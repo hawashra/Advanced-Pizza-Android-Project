@@ -104,6 +104,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         Button buttonOrder;
         ImageView buttonFavorite;
 
+
         public PizzaViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewPizza = itemView.findViewById(R.id.imageViewPizza);

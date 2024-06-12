@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fresh_olive"
     android:orientation="vertical"
 
     android:padding="16dp">
@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/imageViewPizza"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="124dp"
         android:scaleType="centerCrop" />
 
     <TextView
@@ -50,7 +50,6 @@
         android:layout_marginTop="16dp"
         android:background="@color/red"
         android:text="Order"
-        android:textColor="@color/white"
-        android:visibility="visible" />
+        android:textColor="@color/white" />
 
 </LinearLayout>

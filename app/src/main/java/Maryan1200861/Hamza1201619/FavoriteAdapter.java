@@ -1,5 +1,6 @@
 package Maryan1200861.Hamza1201619;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> {
-    private final List<Pizza> favorites;
+    private List<Pizza> favorites;
     private final FavoriteFragment favoriteFragment;
 
     public FavoriteAdapter(List<Pizza> favorites, FavoriteFragment favoriteFragment) {
@@ -44,7 +45,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
 
         holder.buttonFavorite.setOnClickListener(v -> {
             UserManager.getInstance().toggleFavorite(favorite);
-            favoriteFragment.refreshFavorites();
+            favoriteFragment.removeFavorite(favorite);
             Toast.makeText(v.getContext(), "Removed " + favorite.getName() + " from favorites", Toast.LENGTH_SHORT).show();
         });
 
@@ -73,9 +74,15 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         }
 
     }
-    public void updateData(ArrayList<Pizza> favorites) {
-        this.favorites.clear();
-        this.favorites.addAll(favorites);
-        notifyDataSetChanged();
+
+
+    public void removePizza(Pizza pizza) {
+        int index = this.favorites.indexOf(pizza);
+        if (index != -1) {
+            this.favorites.remove(index);
+            notifyItemRemoved(index);
+
+        }
     }
+
 }
