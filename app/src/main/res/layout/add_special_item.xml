@@ -1,0 +1,112 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pizzaCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="8dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/fresh_olive">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageViewPizza"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/pizza_image"
+            android:contentDescription="Pizza" />
+
+        <LinearLayout
+            android:layout_width="249dp"
+            android:layout_height="55sp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewPizzaName"
+                android:layout_width="match_parent"
+                android:layout_height="25sp"
+                android:layout_weight="1"
+                android:fontFamily="@font/baloo"
+                android:paddingStart="16dp"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/baloo"
+                    android:paddingStart="2dp"
+                    android:text="10%"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/baloo"
+                    android:paddingStart="2dp"
+                    android:text="15%"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/baloo"
+                    android:paddingStart="2dp"
+                    android:text="20%"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </RadioGroup>
+
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkSpecialItem"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:buttonTint="#FFF"
+            android:paddingTop="12dp"
+            android:paddingRight="12dp"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+        <Button
+            android:id="@+id/saveOffer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textSize="18sp"
+            android:fontFamily="@font/baloo"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
