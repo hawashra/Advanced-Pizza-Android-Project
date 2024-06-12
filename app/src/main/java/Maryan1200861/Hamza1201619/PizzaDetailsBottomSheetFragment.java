@@ -1,5 +1,6 @@
 package Maryan1200861.Hamza1201619;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,23 +87,46 @@ public class PizzaDetailsBottomSheetFragment extends BottomSheetDialogFragment {
 
         // Set an OnClickListener for the "Order" button
         view.findViewById(R.id.buttonOrder).setOnClickListener(v -> {
-            // TODO: Handle the "Order" button click
-            try (DatabaseHelper db = new DatabaseHelper(v.getContext())) {
-                // Insert the order into the database
-                String email = UserManager.getInstance().getCurrentUser().getEmail();
-                assert pizza != null;
-                int pizzaId = pizza.getId();
-                int quantity = 1;
-                double price = pizza.getPrice();
-                db.orderPizza(email, pizzaId, quantity, price*quantity);
 
-            } catch (Exception e) {
-                Log.d("order_error_db", Objects.requireNonNull(e.getMessage()));
-            }
+            // make a pop up message to ask the user if they want to order the pizza
+            // Create an AlertDialog.Builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+
+            // Set the dialog title and message
+            builder.setTitle("Confirm Order");
+            builder.setMessage("Do you want to order this pizza?");
+
+            // Add a "Yes" button
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                // Handle the "Yes" button click
+                try (DatabaseHelper db = new DatabaseHelper(v.getContext())) {
+                    // Insert the order into the database
+                    String email = UserManager.getInstance().getCurrentUser().getEmail();
+                    assert pizza != null;
+                    int pizzaId = pizza.getId();
+                    int quantity = 1;
+                    double price = pizza.getPrice();
+                    db.orderPizza(email, pizzaId, quantity, price*quantity);
+                    Toast.makeText(v.getContext(), "Order placed", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.d("order_error_db", Objects.requireNonNull(e.getMessage()));
+                }
+            });
+
+            // Add a "No" button
+            builder.setNegativeButton("No", (dialog, which) -> {
+                // Handle the "No" button click
+                Toast.makeText(v.getContext(), "Order cancelled", Toast.LENGTH_SHORT).show();
+            });
+
+
+            // Create and show the dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
         });
 
     }
-
     @Override
     public void onStart() {
         super.onStart();

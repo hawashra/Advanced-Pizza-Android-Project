@@ -30,6 +30,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         holder.orderIdTextView.setText(String.valueOf(order.getOrderId()));
         holder.orderDateTextView.setText(order.getOrderDate());
         holder.totalPriceTextView.setText(String.valueOf(order.getTotalPrice()));
+        holder.userEmailTextView.setText(order.getUserEmail());
 
         // Create and set an adapter for the pizzas RecyclerView
         PizzasAdapter pizzasAdapter = new PizzasAdapter(new ArrayList<>(order.getPizzas().entrySet()));
@@ -47,12 +48,15 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         public TextView totalPriceTextView;
         public RecyclerView pizzasRecyclerView;
 
+        public TextView userEmailTextView;
+
         public OrderViewHolder(View itemView) {
             super(itemView);
             orderIdTextView = itemView.findViewById(R.id.orderIdTextView);
             orderDateTextView = itemView.findViewById(R.id.orderDateTextView);
             totalPriceTextView = itemView.findViewById(R.id.totalPriceTextView);
             pizzasRecyclerView = itemView.findViewById(R.id.pizzasRecyclerView);
+            userEmailTextView = itemView.findViewById(R.id.textViewUserEmail);
         }
     }
 }
