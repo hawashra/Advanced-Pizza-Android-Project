@@ -79,7 +79,13 @@ public class SpecialOffersFragment extends Fragment {
         // Create a new DatabaseHelper and get the list of pizzas
         try (DatabaseHelper databaseHelper = new DatabaseHelper(getContext())) {
 
-            ArrayList<Pizza> pizzas = databaseHelper.getAllPizzas();
+            ArrayList<SpecialOffer> specialOffers = databaseHelper.getSpecialOffers();
+
+            ArrayList<Pizza> pizzas = new ArrayList<>();
+
+            for (SpecialOffer specialOffer : specialOffers) {
+                pizzas.add(specialOffer.getPizzas().get(0));
+            }
 
             // Set up your RecyclerView
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

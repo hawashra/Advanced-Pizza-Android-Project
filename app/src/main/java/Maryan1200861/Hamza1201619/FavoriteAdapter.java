@@ -49,6 +49,24 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
             Toast.makeText(v.getContext(), "Removed " + favorite.getName() + " from favorites", Toast.LENGTH_SHORT).show();
         });
 
+
+
+        holder.buttonOrder.setOnClickListener(v -> {
+            // Handle button click here
+
+            // Show the PizzaDetailsBottomSheetFragment
+            PizzaDetailsBottomSheetFragment.newInstance(favorite)
+                    .show(((FragmentActivity) v.getContext()).getSupportFragmentManager(),
+                            "pizzaDetailsBottomSheet");
+
+
+            Toast.makeText(v.getContext(),
+                    "You clicked on " + favorite.getName(), Toast.LENGTH_SHORT).show();
+
+
+        });
+
+
     }
 
     @Override
