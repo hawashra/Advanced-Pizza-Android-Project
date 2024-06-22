@@ -1,5 +1,8 @@
 package Maryan1200861.Hamza1201619;
 
+import static Maryan1200861.Hamza1201619.R.*;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferencesManager prefsManager;
     private DatabaseHelper dbHelper;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,8 @@ public class LoginActivity extends AppCompatActivity {
 
         findViewById(R.id.buttonSignIn).setOnClickListener(v -> performLogin());
         findViewById(R.id.textViewSignUp).setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, SignUpActivity.class)));
+        findViewById(R.id.back).setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegistrationActivity.class)));
+
     }
 
     private void performLogin() {

@@ -1,5 +1,6 @@
 package Maryan1200861.Hamza1201619;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ public class AdminLoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private SQLiteDatabase db;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,7 @@ public class AdminLoginActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        findViewById(R.id.back).setOnClickListener(v -> startActivity(new Intent(AdminLoginActivity.this, RegistrationActivity.class)));
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         db = dbHelper.getReadableDatabase();

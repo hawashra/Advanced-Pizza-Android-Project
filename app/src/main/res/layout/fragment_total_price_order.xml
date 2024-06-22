@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@color/fresh_olive"
+    tools:context=".TotalPriceOrderFragment">
+
+        <!-- Total income for each type -->
+        <TextView
+            android:id="@+id/tvTotalIncomeEachType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Income for Each Type: "
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <!-- Total income for all types -->
+        <TextView
+            android:id="@+id/tvTotalIncomeAllTypes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Income for All Types: "
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+</FrameLayout>

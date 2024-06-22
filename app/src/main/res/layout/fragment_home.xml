@@ -13,9 +13,14 @@
             android:id="@+id/textViewHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/rest_hist"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:padding="8dp"
+            android:text="{ Welcome to Pizzamania! Welcome to the ultimate pizza experience! }"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:gravity="center"/>
 
         <VideoView
             android:id="@+id/videoView"
