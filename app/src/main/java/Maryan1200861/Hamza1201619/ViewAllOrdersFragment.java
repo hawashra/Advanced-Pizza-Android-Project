@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 public class ViewAllOrdersFragment extends Fragment {
 
-    private TextView tvTotalIncomeEachType, tvTotalIncomeAllTypes;
     ArrayList<Order> orders;
     // TODO: Rename parameter arguments, choose names that match
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,8 +69,6 @@ public class ViewAllOrdersFragment extends Fragment {
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_orders, container, false);
             RecyclerView ordersRecyclerView = view.findViewById(R.id.ordersRecyclerView);
-            tvTotalIncomeEachType = view.findViewById(R.id.tvTotalIncomeEachType);
-            tvTotalIncomeAllTypes = view.findViewById(R.id.tvTotalIncomeAllTypes);
 
             try (DatabaseHelper db = new DatabaseHelper(view.getContext())) {
                 // Get all orders from the database
@@ -83,33 +80,11 @@ public class ViewAllOrdersFragment extends Fragment {
                 ordersRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
                 ordersRecyclerView.setAdapter(ordersAdapter);
 
-                calculateTotalIncome();
             } catch (Exception e) {
                 Log.d("orders_error_db", Objects.requireNonNull(e.getMessage()));
             }
 
             return view;
         }
-    private void calculateTotalIncome() {
-        Map<String, Double> incomePerType = new HashMap<>();
-        double totalIncome = 0;
 
-
-        for (Order order : orders) {
-            for (Map.Entry<Pizza, Integer> entry : order.getPizzas().entrySet()) {
-                Pizza pizza = entry.getKey();
-                int quantity = entry.getValue();
-                double income = pizza.getPrice() * quantity;
-                incomePerType.put(pizza.getCategory(), incomePerType.getOrDefault(pizza.getCategory(), 0.0) + income);
-                totalIncome += income;
-            }
-        }
-
-        StringBuilder totalIncomeEachType = new StringBuilder();
-        for (Map.Entry<String, Double> entry : incomePerType.entrySet()) {
-            totalIncomeEachType.append(entry.getKey()).append(": $").append(entry.getValue()).append("\n");
-        }
-        tvTotalIncomeEachType.setText(totalIncomeEachType.toString());
-        tvTotalIncomeAllTypes.setText(String.format("Total Income for All Types: $%.2f", totalIncome));
-    }
 }
