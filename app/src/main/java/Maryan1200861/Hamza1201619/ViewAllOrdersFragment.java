@@ -1,6 +1,8 @@
 package Maryan1200861.Hamza1201619;
 
 import androidx.fragment.app.Fragment;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,11 +12,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 public class ViewAllOrdersFragment extends Fragment {
-        // TODO: Rename parameter arguments, choose names that match
+
+    private TextView tvTotalIncomeEachType, tvTotalIncomeAllTypes;
+    ArrayList<Order> orders;
+    // TODO: Rename parameter arguments, choose names that match
         // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
         private static final String ARG_PARAM1 = "param1";
         private static final String ARG_PARAM2 = "param2";
@@ -54,15 +64,18 @@ public class ViewAllOrdersFragment extends Fragment {
             }
         }
 
+        @SuppressLint("MissingInflatedId")
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_orders, container, false);
             RecyclerView ordersRecyclerView = view.findViewById(R.id.ordersRecyclerView);
+            tvTotalIncomeEachType = view.findViewById(R.id.tvTotalIncomeEachType);
+            tvTotalIncomeAllTypes = view.findViewById(R.id.tvTotalIncomeAllTypes);
 
             try (DatabaseHelper db = new DatabaseHelper(view.getContext())) {
                 // Get all orders from the database
-                ArrayList<Order> orders = db.getAllOrders();
+                orders = db.getAllOrders();
 
                 // Create and set an adapter for the orders RecyclerView
                 OrdersAdapter ordersAdapter = new OrdersAdapter(orders);
@@ -70,10 +83,33 @@ public class ViewAllOrdersFragment extends Fragment {
                 ordersRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
                 ordersRecyclerView.setAdapter(ordersAdapter);
 
+                calculateTotalIncome();
             } catch (Exception e) {
                 Log.d("orders_error_db", Objects.requireNonNull(e.getMessage()));
             }
 
             return view;
         }
+    private void calculateTotalIncome() {
+        Map<String, Double> incomePerType = new HashMap<>();
+        double totalIncome = 0;
+
+
+        for (Order order : orders) {
+            for (Map.Entry<Pizza, Integer> entry : order.getPizzas().entrySet()) {
+                Pizza pizza = entry.getKey();
+                int quantity = entry.getValue();
+                double income = pizza.getPrice() * quantity;
+                incomePerType.put(pizza.getCategory(), incomePerType.getOrDefault(pizza.getCategory(), 0.0) + income);
+                totalIncome += income;
+            }
+        }
+
+        StringBuilder totalIncomeEachType = new StringBuilder();
+        for (Map.Entry<String, Double> entry : incomePerType.entrySet()) {
+            totalIncomeEachType.append(entry.getKey()).append(": $").append(entry.getValue()).append("\n");
+        }
+        tvTotalIncomeEachType.setText(totalIncomeEachType.toString());
+        tvTotalIncomeAllTypes.setText(String.format("Total Income for All Types: $%.2f", totalIncome));
     }
+}

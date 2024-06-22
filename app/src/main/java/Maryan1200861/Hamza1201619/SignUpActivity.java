@@ -1,5 +1,6 @@
 package Maryan1200861.Hamza1201619;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,11 +26,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     public static String passwordRegex = "((?=.*\\d)(?=.*[a-zA-Z]).{8,})";
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        findViewById(R.id.back).setOnClickListener(v -> startActivity(new Intent(SignUpActivity.this, RegistrationActivity.class)));
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPhone = findViewById(R.id.editTextPhone);
         editTextFirstName = findViewById(R.id.editTextFirstName);

@@ -654,5 +654,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return orders;
     }
 
+    // return a list of special offers
+    public ArrayList<SpecialOffer> getSpecialOffers() {
+        ArrayList<SpecialOffer> specialOffers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_SPECIAL_OFFERS, null);
+        while (cursor.moveToNext()) {
+            int offerId = cursor.getInt(0);
+            String description = cursor.getString(1);
+            String startDate = cursor.getString(2);
+            String endDate = cursor.getString(3);
+            int price = cursor.getInt(4);
+            SpecialOffer specialOffer = new SpecialOffer(offerId, description, startDate, endDate, price);
+            specialOffers.add(specialOffer);
+        }
+        cursor.close();
+        db.close();
+        return specialOffers;
+    }
+
 }
 
